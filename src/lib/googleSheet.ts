@@ -1,6 +1,6 @@
 const SHEET_WEBAPP_URL =
   import.meta.env.VITE_GOOGLE_SHEET_WEBAPP_URL ||
-  'https://script.google.com/macros/s/AKfycbyiA-RYUHYen-71kCD0Tury6d9q6pKYgGLbo4zXsaZ36aRPHb51_qVR-8_DloMUfGI0/exec';
+  'https://script.google.com/macros/s/AKfycbxr_8J3bFftYzAjIrDkprq1hzbZjgN_4xEiekaEA-Tkhq-qzaUH-t7u_xhnxCAj_XiX/exec';
 
 type SheetAction = 'create' | 'update' | 'delete';
 
