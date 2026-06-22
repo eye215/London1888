@@ -119,12 +119,14 @@ export default function HomePage() {
             { type: 'B' as const, dates: ['07.25 SAT 4PM', '07.26 SUN 1PM'] },
           ]).map(({ type, dates }) => (
             <div className="cast-row cast-schedule-row" key={type}>
-              <div className="cast-date-lines" aria-label={`CAST ${type} 공연 일정`}>
+              <div className="cast-session-block" aria-label={`CAST ${type} 공연 일정`}>
                 <span className="cast-date-heading">CAST {type}</span>
-                {dates.map(date => {
-                  const [datePart, dayPart, timePart] = date.split(' ');
-                  return <span className="cast-date-line" key={date}><b>{datePart}</b><small>{dayPart}</small><strong>{timePart}</strong></span>;
-                })}
+                <div className="cast-session-list">
+                  {dates.map(date => {
+                    const [datePart, dayPart, timePart] = date.split(' ');
+                    return <span className="cast-session" key={date}><time>{datePart} <small>{dayPart}</small></time><strong>{timePart}</strong></span>;
+                  })}
+                </div>
               </div>
               <div className="cast-members">
                 <h3>{[...cast[type].main, '흥섭'].join(' · ')}</h3>
