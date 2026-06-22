@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ArrowUp, CalendarDays, Clock3, Heart, MapPin, Share2, Ticket } from 'lucide-react';
+import { ArrowUp, CalendarDays, Clock3, Heart, MapPin, MessageSquareText, Share2, Ticket } from 'lucide-react';
 import { cast } from '../data/show';
 import { supabase } from '../lib/supabase';
 
@@ -121,7 +121,12 @@ export default function HomePage() {
             <div className="cast-row cast-schedule-row" key={type}>
               <div className="cast-session-block" aria-label={`CAST ${type} 공연 일정`}>
                 <span className="cast-date-heading">CAST {type}</span>
-                <p className="cast-schedule-text">{dates.map(date => date.replace(/ (1PM|4PM)$/, ' · $1')).join('  /  ')}</p>
+                <div className="cast-schedule-chips">
+                  {dates.map(date => {
+                    const [datePart, dayPart, timePart] = date.split(' ');
+                    return <span className="cast-schedule-chip" key={date}><span>{datePart} {dayPart}</span><b>{timePart}</b></span>;
+                  })}
+                </div>
               </div>
               <div className="cast-members">
                 <h3>{[...cast[type].main, '흥섭'].join(' · ')}</h3>
@@ -191,6 +196,7 @@ export default function HomePage() {
 
       <div className="mobile-book">
         <button onClick={share} aria-label="공유하기"><Share2 /></button>
+        <button className="review-entry-button" onClick={() => window.location.hash = '#/review-check'}><MessageSquareText size={17} /> 공연후기</button>
         <button className="primary" onClick={() => window.location.hash = '#/booking'}><Ticket size={18} /> 예매하기</button>
       </div>
 

@@ -4,8 +4,11 @@ import BookingPage from './pages/BookingPage';
 import AdminPage from './pages/AdminPage';
 import ManageReservationPage from './pages/ManageReservationPage';
 import SupportMessagePage from './pages/SupportMessagePage';
+import ReviewCheckPage from './pages/ReviewCheckPage';
+import ReviewPage from './pages/ReviewPage';
+import AdminReviewsPage from './pages/AdminReviewsPage';
 
-type Page = 'home' | 'booking' | 'admin' | 'manage' | 'support';
+type Page = 'home' | 'booking' | 'admin' | 'manage' | 'support' | 'review-check' | 'review' | 'admin-reviews';
 
 export default function App() {
   const [page, setPage] = useState<Page>('home');
@@ -17,6 +20,9 @@ export default function App() {
       else if (hash === '#/admin') setPage('admin');
       else if (hash === '#/manage') setPage('manage');
       else if (hash === '#/support') setPage('support');
+      else if (hash === '#/review-check') setPage('review-check');
+      else if (hash === '#/review') setPage('review');
+      else if (hash === '#/admin/reviews') setPage('admin-reviews');
       else setPage('home');
       window.scrollTo(0, 0);
     };
@@ -30,5 +36,8 @@ export default function App() {
   if (page === 'admin') return <AdminPage />;
   if (page === 'manage') return <ManageReservationPage />;
   if (page === 'support') return <SupportMessagePage />;
+  if (page === 'review-check') return <ReviewCheckPage />;
+  if (page === 'review') return <ReviewPage />;
+  if (page === 'admin-reviews') return <AdminReviewsPage />;
   return <HomePage />;
 }

@@ -110,7 +110,9 @@ body{background:#060505;color:#efe8e2}
 .cast-date-label{font-family:'SandollHeirofBold',serif;font-size:clamp(22px,3vw,36px);line-height:1.28;color:#e8ded8;letter-spacing:.02em;text-shadow:0 10px 26px rgba(0,0,0,.45)}
 .cast-session-block{position:relative;z-index:1;padding:4px 0}
 .cast-date-heading{display:block;margin-bottom:12px;color:#a5242e;font-family:'SandollHeirofBold',serif;font-size:11px;letter-spacing:.3em}
-.cast-schedule-text{margin:0;color:#eee5df;font-family:'SandollHeirofBold',serif;font-size:clamp(13px,1.4vw,17px);letter-spacing:.015em;line-height:1.5;white-space:nowrap}
+.cast-schedule-chips{display:flex;flex-wrap:wrap;gap:7px}
+.cast-schedule-chip{display:inline-flex;align-items:center;overflow:hidden;border:1px solid #3c302e;border-radius:5px;background:#0d0a0a;color:#e9e0da;box-shadow:inset 0 1px rgba(255,255,255,.025);font-family:'SandollHeirofBold',serif;white-space:nowrap}
+.cast-schedule-chip>span{padding:9px 10px;font-size:13px;letter-spacing:.025em}.cast-schedule-chip>b{align-self:stretch;display:flex;align-items:center;padding:0 9px;border-left:1px solid #4a292c;background:#1b0c0e;color:#d4444f;font-size:12px;letter-spacing:.06em}
 .cast-members{position:relative;z-index:1}
 .cast-members h3{font-size:clamp(16px,1.7vw,23px);line-height:1.65;word-spacing:.12em}
 .intro h2{font-size:clamp(34px,4.2vw,58px)}
@@ -134,6 +136,7 @@ body{background:#060505;color:#efe8e2}
 .mobile-book{box-shadow:0 -18px 45px rgba(0,0,0,.42)}
 .mobile-book>button:first-child{border-radius:999px}
 .mobile-book .primary{border-radius:999px}
+.review-entry-button{border:1px solid #523237;border-radius:999px;background:#181112;color:#f1e8e2;display:inline-flex;align-items:center;justify-content:center;gap:7px;font-size:12px}
 .quick-top-button{position:fixed;right:18px;bottom:92px;z-index:30;width:46px;height:46px;border:1px solid rgba(174,48,58,.52);border-radius:50%;background:rgba(10,8,8,.82);color:#f4e9e3;display:grid;place-items:center;box-shadow:0 16px 35px rgba(0,0,0,.42);opacity:0;pointer-events:none;transform:translateY(10px);transition:.2s ease;backdrop-filter:blur(14px)}
 .quick-top-button.visible{opacity:1;pointer-events:auto;transform:translateY(0)}
 .quick-top-button:hover{background:#971520;color:#fff}
@@ -169,6 +172,7 @@ body{background:#060505;color:#efe8e2}
 .admin-head{border:1px solid #322726;border-radius:22px;background:linear-gradient(135deg,rgba(40,17,19,.8),rgba(12,10,10,.95));padding:24px;align-items:center}
 .admin-head>div p{margin:0 0 8px;color:#bc2430;font-size:10px;letter-spacing:.32em}
 .admin-head h1{margin:0;color:#fff}
+.admin-head-actions{display:flex;align-items:center;gap:9px}.admin-review-link{min-height:48px;padding:0 17px;border:1px solid #573137;border-radius:10px;background:#1c1012;color:#f3e9e4;display:inline-flex;align-items:center;gap:8px}
 .admin-dashboard{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:22px 0}
 .admin-dashboard-row{grid-template-columns:repeat(3,minmax(0,1fr))}
 .admin-dashboard article{padding:24px;border:1px solid #332827;border-radius:18px;background:#131010}
@@ -183,6 +187,10 @@ body{background:#060505;color:#efe8e2}
 .admin-tools h2{margin:0 0 6px;font-size:22px}.admin-tools p{margin:0;color:#786f6a;font-size:12px}
 .admin-search{display:flex;align-items:center;gap:8px;border:1px solid #3a302e;border-radius:999px;padding:0 14px;background:#090808}
 .admin-search input{width:190px;border:0;background:transparent;color:#fff;outline:0;padding:12px 0}
+.admin-search select{min-width:150px;border:0;background:#090808;color:#fff;outline:0;padding:12px 0}
+.review-lookup-form .field{margin-bottom:20px}.review-card{margin-bottom:40px}.review-hero{padding-bottom:30px}
+.private-review-list{width:min(920px,100%);margin:24px auto 0;display:grid;gap:13px}.private-review-card{padding:24px;border:1px solid #352928;border-radius:18px;background:linear-gradient(145deg,#151111,#0b0909)}
+.private-review-card header{display:flex;justify-content:space-between;gap:18px;padding-bottom:16px;border-bottom:1px solid #302625}.private-review-card header strong{color:#d43b47;letter-spacing:.08em}.private-review-card header time{color:#766d68;font-size:10px}.private-review-card>p{margin:22px 0;color:#e8dfd9;font-size:15px;line-height:2;white-space:pre-wrap}.private-review-card footer{padding:0;display:flex;justify-content:space-between;align-items:center;color:#8d837d}.private-review-card footer span{font-size:12px}.private-review-card footer small{font-size:10px}
 .admin-empty{padding:52px 20px;border:1px dashed #413130;border-radius:16px;text-align:center;color:#8c817b;background:rgba(0,0,0,.18)}
 .admin-empty span{color:#bc2430;font-size:10px;letter-spacing:.22em}.admin-empty h3{margin:12px 0 8px;color:#e8ded8}.admin-empty p{margin:0;font-size:13px}.admin-empty.warning{color:#ffb8bd}
 .admin-table{grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin-top:18px}
@@ -202,7 +210,8 @@ body{background:#060505;color:#efe8e2}
   .cast-schedule-row{grid-template-columns:1fr;gap:12px;min-height:0;padding:34px 0}
   .cast-date-label{font-size:25px}
   .cast-session-block{width:100%}
-  .cast-schedule-text{font-size:clamp(12px,3.5vw,15px);letter-spacing:-.015em}
+  .cast-schedule-chips{display:grid;grid-template-columns:1fr 1fr;width:100%;gap:6px}
+  .cast-schedule-chip{width:100%;justify-content:space-between}.cast-schedule-chip>span{padding:9px 8px;font-size:11px}.cast-schedule-chip>b{padding:0 7px;font-size:11px}
   .message-actions{gap:12px;margin-top:-10px}
   .soft-primary{width:100%}
   .text-link-button{font-size:12px}
@@ -210,7 +219,7 @@ body{background:#060505;color:#efe8e2}
   .footer-actions{justify-content:flex-start;align-items:flex-start;flex-direction:column;gap:12px}
   .mobile-book{display:flex;align-items:center;position:fixed;z-index:20;left:0;right:0;bottom:0;gap:10px;padding:12px 14px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(180deg,rgba(8,6,6,.1),rgba(8,6,6,.97) 28%);border-top:1px solid rgba(128,49,58,.45);backdrop-filter:blur(18px)}
   .mobile-book>button:first-child{width:52px;height:52px;flex:none;background:#171211;color:#f0e8e2;border:1px solid #3e302e}
-  .mobile-book .primary{height:52px;flex:1;background:#a91522}
+  .mobile-book .primary,.mobile-book .review-entry-button{height:52px;flex:1;padding:0 10px}.mobile-book .primary{background:#a91522}
   .quick-top-button{right:14px;bottom:84px;width:42px;height:42px}
   .utility-hero{padding-top:54px}
   .utility-card{width:calc(100% - 28px);padding:22px 16px;border-radius:18px}
@@ -220,6 +229,7 @@ body{background:#060505;color:#efe8e2}
   .manage-actions{grid-template-columns:1fr}
   .admin-page{padding:18px 14px 70px}
   .admin-head{align-items:flex-start}
+  .admin-head-actions{width:100%;display:grid;grid-template-columns:1fr 1fr}.admin-head-actions button{width:100%}
   .admin-dashboard{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
   .admin-dashboard article{min-width:0;padding:14px 10px;border-radius:12px}
   .admin-dashboard span{min-height:28px;margin-bottom:5px;font-size:9px;line-height:1.45}
@@ -228,4 +238,5 @@ body{background:#060505;color:#efe8e2}
   .admin-schedule-cards{grid-template-columns:1fr 1fr}
   .admin-tools{align-items:stretch;flex-direction:column}
   .admin-search input{width:100%}
+  .admin-search select{width:100%}.private-review-card{padding:19px 16px}.private-review-card header,.private-review-card footer{align-items:flex-start;flex-direction:column;gap:7px}
 }

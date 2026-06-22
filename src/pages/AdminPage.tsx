@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ArrowLeft, Download, Lock, Search } from 'lucide-react';
+import { ArrowLeft, Download, Lock, MessageSquareText, Search } from 'lucide-react';
 import { cast, getScheduleLabel, schedules } from '../data/show';
 import { isDatabaseConfigured, supabase } from '../lib/supabase';
 
@@ -93,7 +93,10 @@ export default function AdminPage() {
           <p>1888 BACK OFFICE</p>
           <h1>예매 관리</h1>
         </div>
-        <button className="primary" onClick={download} disabled={!items.length}><Download /> CSV 다운로드</button>
+        <div className="admin-head-actions">
+          <button className="admin-review-link" onClick={() => window.location.hash = '#/admin/reviews'}><MessageSquareText size={17} /> 공연 후기</button>
+          <button className="primary" onClick={download} disabled={!items.length}><Download /> CSV 다운로드</button>
+        </div>
       </div>
 
       <section className="admin-dashboard admin-dashboard-row">
