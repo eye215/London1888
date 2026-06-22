@@ -1,0 +1,181 @@
+import { useEffect, useMemo, useState } from 'react';
+import { CalendarDays, Clock3, Heart, MapPin, Share2, Ticket } from 'lucide-react';
+import { cast } from '../data/show';
+import { supabase } from '../lib/supabase';
+
+type PublicMessage = {
+  id: string;
+  actor_name: string | null;
+  message: string;
+  author_display: string | null;
+  source: 'reservation' | 'supporter';
+  created_at: string;
+};
+
+const FIRST_SHOW_DATE = new Date('2026-07-25T13:00:00+09:00');
+const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`.replace(/\/+/g, '/');
+
+export default function HomePage() {
+  const [messages, setMessages] = useState<PublicMessage[]>([]);
+  const [toast, setToast] = useState('');
+
+  const dDay = useMemo(() => {
+    const today = new Date();
+    const start = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
+    const target = new Date(FIRST_SHOW_DATE.getFullYear(), FIRST_SHOW_DATE.getMonth(), FIRST_SHOW_DATE.getDate()).getTime();
+    const diff = Math.ceil((target - start) / 86400000);
+    if (diff > 0) return `D-${diff}`;
+    if (diff === 0) return 'D-DAY';
+    return '공연 종료';
+  }, []);
+
+  useEffect(() => {
+    const savedToast = localStorage.getItem('toastMessage');
+    if (savedToast) {
+      setToast(savedToast);
+      localStorage.removeItem('toastMessage');
+      window.setTimeout(() => setToast(''), 3600);
+    }
+
+    supabase
+      .from('public_messages')
+      .select('id, actor_name, message, author_display, source, created_at')
+      .order('created_at', { ascending: false })
+      .limit(12)
+      .then(({ data, error }) => {
+        if (!error) setMessages((data || []) as PublicMessage[]);
+      });
+  }, []);
+
+  const share = async () => {
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: '1888, 런던의 밤', url: window.location.href });
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        setToast('링크를 복사했어요.');
+        window.setTimeout(() => setToast(''), 2600);
+      }
+    } catch {
+      // 공유 취소
+    }
+  };
+
+  return (
+    <main className="site-shell">
+      {toast && <div className="toast">{toast}</div>}
+
+      <header className="hero poster-hero compact-hero">
+        <div className="poster-stage" aria-label="1888, 런던의 밤 공연 포스터">
+          <img className="poster-layer poster-background" src={asset('assets/jack-main.jpg')} alt="붉은 심장과 장미가 있는 공연 포스터" />
+          <img className="poster-layer poster-dagger" src={asset('assets/falling-dagger.png')} alt="" aria-hidden="true" />
+          <img className="poster-layer poster-title" src={asset('assets/show-title.png')} alt="1888, 런던의 밤" />
+        </div>
+        <div className="hero-actions hero-date-only">
+          <strong className="hero-dday">{dDay}</strong>
+          <p>07.25 SAT — 07.26 SUN <span>·</span> 1PM / 4PM</p>
+        </div>
+        <div className="scroll-cue">SCROLL <span /></div>
+      </header>
+
+      <section className="section intro">
+        <div>
+          <p className="section-no">01 · THE STORY</p>
+          <h2>멈춰 있던 밤,<br /><em>진실은 다시 심장을 뛴다.</em></h2>
+        </div>
+        <p className="body-copy">
+          1888년 런던. 붉은 안개가 내려앉은 밤, 서로 다른 이유로 모인 사람들이 하나의 선택 앞에 선다.
+          빛과 그림자, 침묵과 고백이 교차하는 시간 속에서 당신의 밤은 어느 쪽으로 기울게 될까요.
+        </p>
+      </section>
+
+      <section className="section program-section">
+        <div className="section-heading">
+          <p className="section-no">02 · PROGRAM</p>
+          <h2>공연 일정과 캐스트</h2>
+          <p className="section-desc">캐스트별 공연 회차와 배우 구성을 확인하세요. 추후 배역 이미지 배경에 맞춰 텍스트 배열은 조정 가능합니다.</p>
+        </div>
+
+        <div className="cast-list cast-schedule-list">
+          {([
+            { type: 'A' as const, dates: ['07.25 SAT 1PM', '07.26 SUN 4PM'] },
+            { type: 'B' as const, dates: ['07.25 SAT 4PM', '07.26 SUN 1PM'] },
+          ]).map(({ type, dates }) => (
+            <div className="cast-row cast-schedule-row" key={type}>
+              <div className="cast-date-chips" aria-label={`CAST ${type} 공연 일정`}>
+                {dates.map(date => <span key={date}>{date}</span>)}
+              </div>
+              <div>
+                <p className="cast-label">CAST {type}</p>
+                <h3>{cast[type].main.join(' · ')}</h3>
+                <p>ENSEMBLE · {cast[type].ensemble.join(' · ')}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="section message-section">
+        <div className="section-heading">
+          <p className="section-no">03 · MESSAGES</p>
+          <h2>응원의 마음</h2>
+          <p className="message-intro">예매자와 관객의 마음이 함께 쌓이는 공간입니다.</p>
+        </div>
+
+        <div className="message-actions">
+          <button className="primary soft-primary" onClick={() => window.location.hash = '#/booking'}>
+            예매하여 메시지 남기기
+          </button>
+          <button className="text-link-button" onClick={() => window.location.hash = '#/support'}>
+            관람이 어려우신가요? 응원만 남겨주세요
+          </button>
+        </div>
+
+        {messages.length > 0 ? (
+          <div className="message-grid">
+            {messages.map(item => (
+              <article className="message-card" key={item.id}>
+                <div>
+                  <Heart size={15} />
+                  <span>{item.actor_name ? `TO. ${item.actor_name}` : 'TO. 1888'}</span>
+                </div>
+                <p>{item.message}</p>
+                <footer>
+                  <small>from, {item.author_display || '익명'}</small>
+                  <time>{new Date(item.created_at).toLocaleDateString('ko-KR')}</time>
+                </footer>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div className="message-empty">
+            <Heart size={20} />
+            <p>아직 등록된 응원 메시지가 없습니다. 첫 마음을 남겨주세요.</p>
+          </div>
+        )}
+      </section>
+
+      <section className="info-strip">
+        <div><CalendarDays /><span>DATES<strong>2026. 07. 25 — 07. 26</strong></span></div>
+        <div><Clock3 /><span>TIME<strong>13:00 / 16:00</strong></span></div>
+        <div><MapPin /><span>VENUE<strong>공연장 추후 안내</strong></span></div>
+      </section>
+
+      <footer className="site-footer">
+        <div>
+          <span className="footer-title">1888</span>
+          <p>런던의 밤이 당신을 기다립니다.</p>
+        </div>
+        <div className="footer-actions">
+          <a href="#/manage">갑자기 일정이 변경되셨나요?</a>
+          <a href="#/admin">ADMIN</a>
+        </div>
+      </footer>
+
+      <div className="mobile-book">
+        <button onClick={share} aria-label="공유하기"><Share2 /></button>
+        <button className="primary" onClick={() => window.location.hash = '#/booking'}><Ticket size={18} /> 예매하기</button>
+      </div>
+    </main>
+  );
+}
