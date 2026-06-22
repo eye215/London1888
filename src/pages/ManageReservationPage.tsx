@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ArrowLeft, Search, Trash2 } from 'lucide-react';
 import { cast, getScheduleLabel, schedules } from '../data/show';
 import { isDatabaseConfigured, supabase } from '../lib/supabase';
@@ -27,6 +27,19 @@ export default function ManageReservationPage() {
   const [working, setWorking] = useState(false);
 
   const selectedSchedule = useMemo(() => schedules.find(item => item.value === schedule), [schedule]);
+
+  useEffect(() => {
+    const saved = sessionStorage.getItem('reservationLookup');
+    if (!saved) return;
+    sessionStorage.removeItem('reservationLookup');
+    try {
+      const lookup = JSON.parse(saved) as { name?: string; phone?: string };
+      setName(lookup.name || '');
+      setPhone(lookup.phone || '');
+    } catch {
+      // 잘못된 임시 데이터는 무시합니다.
+    }
+  }, []);
 
   const findReservation = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -63,7 +63,6 @@ export default function SupportMessagePage() {
       <section className="utility-hero">
         <p>ONLY HEART</p>
         <h1>관람이 어려워도<br />마음은 남길 수 있어요.</h1>
-        <span>예매 없이도 배우를 선택해 응원의 메시지를 전할 수 있습니다. 홈 화면의 응원의 마음 영역에 함께 노출됩니다.</span>
       </section>
 
       <section className="utility-card">

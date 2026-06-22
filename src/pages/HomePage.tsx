@@ -85,7 +85,7 @@ export default function HomePage() {
         </div>
         <div className="hero-actions hero-date-only">
           <strong className="hero-dday">{dDay}</strong>
-          <p>07.25 SAT — 07.26 SUN <span>·</span> 1PM / 4PM</p>
+          <p><span className="hero-date-range">07.25 SAT — 07.26 SUN</span><span className="hero-time-range">1PM / 4PM</span></p>
         </div>
         <div className="scroll-cue">SCROLL <span /></div>
       </header>
@@ -119,14 +119,15 @@ export default function HomePage() {
             { type: 'B' as const, dates: ['07.25 SAT 4PM', '07.26 SUN 1PM'] },
           ]).map(({ type, dates }) => (
             <div className="cast-row cast-schedule-row" key={type}>
-              <div className="cast-date-chips" aria-label={`CAST ${type} 공연 일정`}>
+              <div className="cast-date-lines" aria-label={`CAST ${type} 공연 일정`}>
                 <span className="cast-date-heading">CAST {type}</span>
-                {dates.map(date => <span className="cast-date-chip" key={date}>{date}</span>)}
+                {dates.map(date => {
+                  const [datePart, dayPart, timePart] = date.split(' ');
+                  return <span className="cast-date-line" key={date}><b>{datePart}</b><small>{dayPart}</small><strong>{timePart}</strong></span>;
+                })}
               </div>
               <div className="cast-members">
-                <p className="cast-label">배역</p>
-                <h3>{cast[type].main.join(' · ')}</h3>
-                <p>앙상블 · {cast[type].ensemble.join(' · ')}</p>
+                <h3>{[...cast[type].main, '흥섭'].join(' · ')}</h3>
               </div>
             </div>
           ))}

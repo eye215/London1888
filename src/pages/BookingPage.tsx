@@ -1,6 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ArrowLeft, Check, ChevronRight } from 'lucide-react';
-import { allActors, cast, schedules } from '../data/show';
+import { allActors, cast, getScheduleLabel, schedules } from '../data/show';
 import { isDatabaseConfigured, supabase } from '../lib/supabase';
 import { syncGoogleSheet } from '../lib/googleSheet';
 
@@ -12,6 +12,13 @@ type FormData = {
   schedule: string;
   actors: string[];
   message: string;
+};
+
+type ExistingReservation = {
+  id: string;
+  num_people: number;
+  schedule: string;
+  actor_name: string;
 };
 
 const formatPhone = (value: string) => {
@@ -41,6 +48,11 @@ export default function BookingPage() {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
+  const [existingReservation, setExistingReservation] = useState<ExistingReservation | null>(null);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, []);
 
   const selectedSchedule = useMemo(() => schedules.find(s => s.value === form.schedule), [form.schedule]);
   const actorChoices = useMemo(() => {
@@ -84,6 +96,18 @@ export default function BookingPage() {
 
     setSubmitting(true);
     try {
+      const { data: existingData, error: lookupError } = await supabase.rpc('find_reservation_by_contact', {
+        p_name: form.name.trim(),
+        p_phone: form.phone,
+      });
+      if (lookupError) throw lookupError;
+
+      const existing = Array.isArray(existingData) ? existingData[0] : null;
+      if (existing) {
+        setExistingReservation(existing as ExistingReservation);
+        return;
+      }
+
       const actorNames = form.actors.join(', ');
       const reservationId = crypto.randomUUID();
       const { error } = await supabase.from('reservations').insert({
@@ -136,12 +160,36 @@ export default function BookingPage() {
     }
   };
 
+  const goToManage = () => {
+    sessionStorage.setItem('reservationLookup', JSON.stringify({ name: form.name.trim(), phone: form.phone }));
+    window.location.hash = '#/manage';
+  };
+
   return (
     <main className="booking-page">
       <header className="booking-header">
         <button className="text-button" onClick={() => window.location.hash = '#/'}><ArrowLeft size={18} /> 돌아가기</button>
         <span>1888 · RESERVATION</span>
       </header>
+
+      {existingReservation && (
+        <div className="duplicate-modal-backdrop" role="presentation">
+          <section className="duplicate-modal" role="dialog" aria-modal="true" aria-labelledby="duplicate-title">
+            <p>RESERVATION FOUND</p>
+            <h2 id="duplicate-title">예매내역이 있습니다.</h2>
+            <div className="duplicate-reservation-info">
+              <span>{getScheduleLabel(existingReservation.schedule)}</span>
+              <strong>{existingReservation.num_people}명</strong>
+              <small>{existingReservation.actor_name}</small>
+            </div>
+            <p className="duplicate-question">예매 내역을 수정하시겠습니까?</p>
+            <div className="duplicate-actions">
+              <button type="button" className="primary" onClick={goToManage}>확인</button>
+              <button type="button" className="modal-cancel" onClick={() => setExistingReservation(null)}>취소</button>
+            </div>
+          </section>
+        </div>
+      )}
 
       <div className="booking-layout">
         <aside className="booking-poster">
