@@ -89,7 +89,7 @@ body{background:#060505;color:#efe8e2}
 .toast{position:fixed;z-index:100;top:22px;left:50%;transform:translateX(-50%);padding:13px 18px;border:1px solid rgba(194,43,56,.55);border-radius:999px;background:rgba(12,9,9,.92);box-shadow:0 18px 45px rgba(0,0,0,.45);color:#f3ebe7;font-size:13px;backdrop-filter:blur(16px)}
 .poster-hero .nav{display:none}
 .hero-date-only{bottom:8.5%;width:min(92%,760px)}
-.hero-date-only p{font-family:'SandollHeirofBold',serif;font-size:clamp(22px,4.8vw,42px);line-height:1.25;letter-spacing:.08em;color:#f2e9e3;text-shadow:0 4px 16px #000,0 0 28px rgba(145,13,25,.35)}
+.hero-date-only p{font-family:'SandollHeirofBold',serif;font-size:clamp(16px,2.8vw,26px);line-height:1.25;letter-spacing:.08em;color:#f2e9e3;text-shadow:0 4px 16px #000,0 0 28px rgba(145,13,25,.35)}
 .hero-date-only p span{font-size:.8em;color:#c51b29}
 .compact-hero{height:86svh;min-height:610px}
 .compact-hero .poster-stage{height:86svh;min-height:610px;width:min(100vw,60.8svh)}
@@ -178,7 +178,7 @@ body{background:#060505;color:#efe8e2}
 @media(max-width:800px){
   .toast{top:14px;width:calc(100% - 28px);text-align:center}
   .hero-date-only{bottom:11%;padding:0 18px}
-  .hero-date-only p{font-size:clamp(23px,7.4vw,34px);letter-spacing:.04em}
+  .hero-date-only p{font-size:clamp(16px,4.8vw,22px);letter-spacing:.04em}
   .compact-hero{height:78svh;min-height:560px}
   .compact-hero .poster-stage{height:78svh;min-height:560px;width:min(100vw,55.2svh)}
   .hero-dday{font-size:12px;margin-bottom:8px}
