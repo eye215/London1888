@@ -121,12 +121,7 @@ export default function HomePage() {
             <div className="cast-row cast-schedule-row" key={type}>
               <div className="cast-session-block" aria-label={`CAST ${type} 공연 일정`}>
                 <span className="cast-date-heading">CAST {type}</span>
-                <div className="cast-session-list">
-                  {dates.map(date => {
-                    const [datePart, dayPart, timePart] = date.split(' ');
-                    return <span className="cast-session" key={date}><time>{datePart} <small>{dayPart}</small></time><strong>{timePart}</strong></span>;
-                  })}
-                </div>
+                <p className="cast-schedule-text">{dates.map(date => date.replace(/ (1PM|4PM)$/, ' · $1')).join('  /  ')}</p>
               </div>
               <div className="cast-members">
                 <h3>{[...cast[type].main, '흥섭'].join(' · ')}</h3>
