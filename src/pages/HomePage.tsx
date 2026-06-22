@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { CalendarDays, Clock3, Heart, MapPin, Share2, Ticket } from 'lucide-react';
+import { ArrowUp, CalendarDays, Clock3, Heart, MapPin, Share2, Ticket } from 'lucide-react';
 import { cast } from '../data/show';
 import { supabase } from '../lib/supabase';
 
@@ -17,6 +17,8 @@ const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`.replace(/\/
 
 export default function HomePage() {
   const [messages, setMessages] = useState<PublicMessage[]>([]);
+  const [visibleMessageCount, setVisibleMessageCount] = useState(10);
+  const [showTopButton, setShowTopButton] = useState(false);
   const [toast, setToast] = useState('');
 
   const dDay = useMemo(() => {
@@ -41,10 +43,17 @@ export default function HomePage() {
       .from('public_messages')
       .select('id, actor_name, message, author_display, source, created_at')
       .order('created_at', { ascending: false })
-      .limit(12)
+      .limit(100)
       .then(({ data, error }) => {
         if (!error) setMessages((data || []) as PublicMessage[]);
       });
+  }, []);
+
+  useEffect(() => {
+    const onScroll = () => setShowTopButton(window.scrollY > 12);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   const share = async () => {
@@ -60,6 +69,9 @@ export default function HomePage() {
       // 공유 취소
     }
   };
+
+  const displayedMessages = messages.slice(0, visibleMessageCount);
+  const canViewMore = visibleMessageCount < messages.length;
 
   return (
     <main className="site-shell">
@@ -89,11 +101,16 @@ export default function HomePage() {
         </p>
       </section>
 
+      <section className="info-strip">
+        <div><CalendarDays /><span>DATES<strong>2026. 07. 25 — 07. 26</strong></span></div>
+        <div><Clock3 /><span>TIME<strong>13:00 / 16:00</strong></span></div>
+        <div><MapPin /><span>VENUE<strong>공연장 추후 안내</strong></span></div>
+      </section>
+
       <section className="section program-section">
         <div className="section-heading">
           <p className="section-no">02 · PROGRAM</p>
           <h2>공연 일정과 캐스트</h2>
-          <p className="section-desc">캐스트별 공연 회차와 배우 구성을 확인하세요. 추후 배역 이미지 배경에 맞춰 텍스트 배열은 조정 가능합니다.</p>
         </div>
 
         <div className="cast-list cast-schedule-list">
@@ -103,12 +120,13 @@ export default function HomePage() {
           ]).map(({ type, dates }) => (
             <div className="cast-row cast-schedule-row" key={type}>
               <div className="cast-date-chips" aria-label={`CAST ${type} 공연 일정`}>
-                {dates.map(date => <span key={date}>{date}</span>)}
+                <span className="cast-date-heading">CAST {type}</span>
+                {dates.map(date => <span className="cast-date-chip" key={date}>{date}</span>)}
               </div>
-              <div>
-                <p className="cast-label">CAST {type}</p>
+              <div className="cast-members">
+                <p className="cast-label">배역</p>
                 <h3>{cast[type].main.join(' · ')}</h3>
-                <p>ENSEMBLE · {cast[type].ensemble.join(' · ')}</p>
+                <p>앙상블 · {cast[type].ensemble.join(' · ')}</p>
               </div>
             </div>
           ))}
@@ -132,33 +150,34 @@ export default function HomePage() {
         </div>
 
         {messages.length > 0 ? (
-          <div className="message-grid">
-            {messages.map(item => (
-              <article className="message-card" key={item.id}>
-                <div>
-                  <Heart size={15} />
-                  <span>{item.actor_name ? `TO. ${item.actor_name}` : 'TO. 1888'}</span>
-                </div>
-                <p>{item.message}</p>
-                <footer>
-                  <small>from, {item.author_display || '익명'}</small>
-                  <time>{new Date(item.created_at).toLocaleDateString('ko-KR')}</time>
-                </footer>
-              </article>
-            ))}
-          </div>
+          <>
+            <div className="message-grid">
+              {displayedMessages.map(item => (
+                <article className="message-card" key={item.id}>
+                  <div>
+                    <Heart size={15} />
+                    <span>{item.actor_name ? `TO. ${item.actor_name}` : 'TO. 1888'}</span>
+                  </div>
+                  <p>{item.message}</p>
+                  <footer>
+                    <small>from, {item.author_display || '익명'}</small>
+                    <time>{new Date(item.created_at).toLocaleDateString('ko-KR')}</time>
+                  </footer>
+                </article>
+              ))}
+            </div>
+            {canViewMore && (
+              <button className="view-more-button" onClick={() => setVisibleMessageCount(count => count + 10)}>
+                View more +
+              </button>
+            )}
+          </>
         ) : (
           <div className="message-empty">
             <Heart size={20} />
             <p>아직 등록된 응원 메시지가 없습니다. 첫 마음을 남겨주세요.</p>
           </div>
         )}
-      </section>
-
-      <section className="info-strip">
-        <div><CalendarDays /><span>DATES<strong>2026. 07. 25 — 07. 26</strong></span></div>
-        <div><Clock3 /><span>TIME<strong>13:00 / 16:00</strong></span></div>
-        <div><MapPin /><span>VENUE<strong>공연장 추후 안내</strong></span></div>
       </section>
 
       <footer className="site-footer">
@@ -176,6 +195,14 @@ export default function HomePage() {
         <button onClick={share} aria-label="공유하기"><Share2 /></button>
         <button className="primary" onClick={() => window.location.hash = '#/booking'}><Ticket size={18} /> 예매하기</button>
       </div>
+
+      <button
+        className={showTopButton ? 'quick-top-button visible' : 'quick-top-button'}
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        aria-label="최상단으로 이동"
+      >
+        <ArrowUp size={18} />
+      </button>
     </main>
   );
 }
