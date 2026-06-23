@@ -121,6 +121,13 @@ export default function HomePage() {
       <header className="hero poster-hero compact-hero">
         <div className="poster-stage" aria-label="1888, 런던의 밤 공연 포스터">
           <img className="poster-layer poster-background" src={asset('assets/jack-main.jpg')} alt="붉은 심장과 장미가 있는 공연 포스터" />
+          <div className="poster-prop-layer" aria-hidden="true">
+            <img className="poster-floating-prop prop-sickle" src={asset('assets/floating-sickle.png')} alt="" />
+            <img className="poster-floating-prop prop-dagger-wide" src={asset('assets/floating-dagger-wide.png')} alt="" />
+            <img className="poster-floating-prop prop-camera" src={asset('assets/floating-camera.png')} alt="" />
+            <img className="poster-floating-prop prop-revolver" src={asset('assets/floating-revolver.png')} alt="" />
+            <img className="poster-floating-prop prop-typewriter" src={asset('assets/floating-typewriter.png')} alt="" />
+          </div>
           <img className="poster-layer poster-dagger" src={asset('assets/falling-dagger.png')} alt="" aria-hidden="true" />
           <img className="poster-layer poster-title" src={asset('assets/show-title.png')} alt="1888, 런던의 밤" />
         </div>

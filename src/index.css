@@ -2006,3 +2006,134 @@ body{
     padding:20px 16px!important;
   }
 }
+
+/* Floating poster props: background < props < dagger/title */
+.compact-hero .poster-background{
+  z-index:0!important;
+}
+
+.poster-prop-layer{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  overflow:hidden;
+  pointer-events:none;
+  user-select:none;
+}
+
+.poster-floating-prop{
+  position:absolute;
+  display:block;
+  max-width:none;
+  height:auto;
+  opacity:.48;
+  filter:brightness(.72) contrast(1.18) saturate(.82) drop-shadow(0 22px 22px rgba(0,0,0,.72));
+  transform-origin:center;
+  animation:poster-prop-float 8.6s ease-in-out infinite alternate;
+  will-change:transform;
+}
+
+.prop-sickle{
+  --prop-rotate:-7deg;
+  width:132%;
+  left:-45%;
+  top:-8%;
+  opacity:.4;
+  animation-duration:10.5s;
+}
+
+.prop-dagger-wide{
+  --prop-rotate:-20deg;
+  width:112%;
+  left:-52%;
+  top:45%;
+  opacity:.43;
+  animation-duration:9.2s;
+  animation-delay:-2.4s;
+}
+
+.prop-camera{
+  --prop-rotate:4deg;
+  width:60%;
+  right:-31%;
+  top:32%;
+  opacity:.42;
+  animation-duration:8.8s;
+  animation-delay:-1.2s;
+}
+
+.prop-revolver{
+  --prop-rotate:14deg;
+  width:57%;
+  right:-25%;
+  bottom:2%;
+  opacity:.52;
+  animation-duration:9.8s;
+  animation-delay:-3.1s;
+}
+
+.prop-typewriter{
+  --prop-rotate:-9deg;
+  width:84%;
+  left:-42%;
+  bottom:-23%;
+  opacity:.46;
+  animation-duration:11.2s;
+  animation-delay:-4.2s;
+}
+
+@keyframes poster-prop-float{
+  0%{
+    transform:translate3d(-6px,10px,0) rotate(calc(var(--prop-rotate) - 1.2deg)) scale(1);
+  }
+  48%{
+    transform:translate3d(9px,-14px,0) rotate(calc(var(--prop-rotate) + 1.4deg)) scale(1.018);
+  }
+  100%{
+    transform:translate3d(-3px,7px,0) rotate(calc(var(--prop-rotate) - .5deg)) scale(.996);
+  }
+}
+
+@media(max-width:800px){
+  .poster-floating-prop{
+    opacity:.5;
+    filter:brightness(.68) contrast(1.22) saturate(.85) drop-shadow(0 18px 18px rgba(0,0,0,.78));
+  }
+
+  .prop-sickle{
+    width:150%;
+    left:-58%;
+    top:-4%;
+  }
+
+  .prop-dagger-wide{
+    width:125%;
+    left:-62%;
+    top:46%;
+  }
+
+  .prop-camera{
+    width:68%;
+    right:-38%;
+    top:34%;
+  }
+
+  .prop-revolver{
+    width:64%;
+    right:-30%;
+    bottom:-2%;
+  }
+
+  .prop-typewriter{
+    width:95%;
+    left:-52%;
+    bottom:-20%;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .poster-floating-prop{
+    animation:none!important;
+    transform:rotate(var(--prop-rotate));
+  }
+}
