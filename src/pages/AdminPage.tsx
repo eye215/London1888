@@ -211,24 +211,19 @@ export default function AdminPage() {
           </div>
         </div>
 
-        <div className="admin-schedule-cards in-panel">
+        <div className="admin-schedule-cards admin-schedule-tabs in-panel" aria-label="회차별 예매내역 필터">
+          <button type="button" className={activeSchedule === 'all' ? 'active' : ''} onClick={() => setActiveSchedule('all')}>
+            <header><strong>전체 예매</strong></header>
+            <div className="seat-line"><span>{activeItems.length}건 · {totalPeople}명</span><b>전체 보기</b></div>
+          </button>
           {scheduleStats.map(({ schedule, count, people, remain }) => {
             return (
-              <article key={schedule.value}>
+              <button type="button" key={schedule.value} className={activeSchedule === schedule.value ? 'active' : ''} onClick={() => setActiveSchedule(schedule.value)}>
                 <header><strong>{schedule.date} {schedule.time}</strong></header>
                 <div className="seat-line"><span>{count}건 · {people}명</span><b>{remain.toLocaleString()}석 남음</b></div>
-              </article>
+              </button>
             );
           })}
-        </div>
-
-        <div className="reservation-tabs">
-          <button type="button" className={activeSchedule === 'all' ? 'active' : ''} onClick={() => setActiveSchedule('all')}>전체</button>
-          {schedules.map(schedule => (
-            <button type="button" key={schedule.value} className={activeSchedule === schedule.value ? 'active' : ''} onClick={() => setActiveSchedule(schedule.value)}>
-              {schedule.date} · {schedule.time}
-            </button>
-          ))}
         </div>
 
         {actionMessage && <div className="admin-inline-message">{actionMessage}</div>}
