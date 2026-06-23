@@ -10,6 +10,7 @@ export default function SupportMessagePage() {
   const [message, setMessage] = useState('');
   const [status, setStatus] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const canSubmit = nickname.trim().length > 0 && actors.length > 0 && message.trim().length > 0 && !submitting;
 
   useEffect(() => window.scrollTo({ top: 0, left: 0, behavior: 'auto' }), []);
 
@@ -98,7 +99,7 @@ export default function SupportMessagePage() {
             <div className="counter">{message.length} / 300</div>
           </label>
           {status && <p className="status-message">{status}</p>}
-          <button type="submit" className="submit-button" disabled={submitting}><Heart size={18} /> {submitting ? '저장 중' : '응원메세지 남기기'}</button>
+          <button type="submit" className="submit-button" disabled={!canSubmit}><Heart size={18} /> {submitting ? '저장 중' : '응원메세지 남기기'}</button>
         </form>
       </section>
     </main>

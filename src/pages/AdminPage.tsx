@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ArrowLeft, Download, Edit3, Lock, MessageSquareText, RefreshCw, Save, Trash2, X } from 'lucide-react';
-import { cast, getCompactScheduleLabel, schedules } from '../data/show';
+import { getCompactScheduleLabel, schedules } from '../data/show';
 import { isDatabaseConfigured, supabase } from '../lib/supabase';
 import { syncGoogleSheet } from '../lib/googleSheet';
 
@@ -22,7 +22,7 @@ const SEATS_PER_SHOW = 589;
 
 export default function AdminPage() {
   const [password, setPassword] = useState('');
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(() => sessionStorage.getItem(ADMIN_SESSION_KEY) === 'true');
   const [items, setItems] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState(false);
   const [loadError, setLoadError] = useState('');
@@ -147,12 +147,14 @@ export default function AdminPage() {
     setLoading(true);
     setActionMessage('');
     try {
-      const { error } = await supabase.rpc('admin_soft_delete_reservation', {
+      const { data, error } = await supabase.rpc('admin_soft_delete_reservation', {
         p_password: ADMIN_PASSWORD,
         p_id: item.id,
       });
       if (error) throw error;
-      const deletedAt = new Date().toISOString();
+      const result = Array.isArray(data) ? data[0] : null;
+      if (!result) throw new Error('삭제할 예매 내역을 찾지 못했습니다.');
+      const deletedAt = result.admin_deleted_at || new Date().toISOString();
       setItems(prev => prev.map(row => row.id === item.id ? { ...row, admin_deleted_at: deletedAt } : row));
       syncGoogleSheet({ action: 'delete', id: item.id, name: item.name, phone: item.phone, schedule: item.schedule, actorName: item.actor_name, message: item.message || '' });
       setActionMessage('예매 내역이 삭제 표시되었습니다.');
@@ -211,12 +213,10 @@ export default function AdminPage() {
 
         <div className="admin-schedule-cards in-panel">
           {scheduleStats.map(({ schedule, count, people, remain }) => {
-            const visibleNames = cast[schedule.cast].main.filter(name => !['유리', '흥섭', '준범'].includes(name));
             return (
               <article key={schedule.value}>
                 <header><strong>{schedule.date} {schedule.time}</strong></header>
                 <div className="seat-line"><span>{count}건 · {people}명</span><b>{remain.toLocaleString()}석 남음</b></div>
-                <em>{visibleNames.join(' · ')}</em>
               </article>
             );
           })}
@@ -277,7 +277,6 @@ export default function AdminPage() {
                   <>
                     <dl>
                       <div><dt>회차</dt><dd>{getCompactScheduleLabel(item.schedule)}</dd></div>
-                      <div><dt>배우</dt><dd>{item.actor_name}</dd></div>
                       {item.message && <div><dt>응원</dt><dd>{item.message}</dd></div>}
                       <div><dt>예매일</dt><dd>{new Date(item.created_at).toLocaleString('ko-KR')}</dd></div>
                     </dl>

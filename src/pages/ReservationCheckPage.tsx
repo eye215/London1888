@@ -143,11 +143,13 @@ export default function ReservationCheckPage() {
       </section>
 
       <section className="utility-card">
-        <form onSubmit={findReservation} className="lookup-form">
-          <label className="field"><span className="field-label">예매자 실명</span><input value={name} onChange={event => setName(event.target.value)} placeholder="실명을 입력해주세요" /></label>
-          <label className="field"><span className="field-label">전화번호</span><input inputMode="numeric" value={phone} onChange={event => setPhone(formatPhone(event.target.value))} placeholder="010-0000-0000" /></label>
-          <button className="submit-button" disabled={working}><Search size={18} /> {working ? '예매 확인 중' : '예매확인하기'}</button>
-        </form>
+        {!reservation && (
+          <form onSubmit={findReservation} className="lookup-form">
+            <label className="field"><span className="field-label">예매자 실명</span><input value={name} onChange={event => setName(event.target.value)} placeholder="실명을 입력해주세요" /></label>
+            <label className="field"><span className="field-label">전화번호</span><input inputMode="numeric" value={phone} onChange={event => setPhone(formatPhone(event.target.value))} placeholder="010-0000-0000" /></label>
+            <button className="submit-button" disabled={working}><Search size={18} /> {working ? '예매 확인 중' : '예매확인하기'}</button>
+          </form>
+        )}
 
         {status && <p className="status-message">{status}</p>}
 

@@ -104,6 +104,14 @@ export default function ManageReservationPage() {
     window.location.hash = '#/';
   };
 
+  const cancelChange = () => {
+    if (window.history.length > 1) {
+      window.history.back();
+      return;
+    }
+    window.location.hash = '#/';
+  };
+
   const cancelReservation = async () => {
     if (!reservation) return;
     if (!window.confirm('예매를 취소할까요? 취소된 예매 내역은 복구할 수 없습니다.')) return;
@@ -147,7 +155,7 @@ export default function ManageReservationPage() {
 
         {reservation && (
           <div className="manage-result">
-            <div className="display-card reservation-summary">
+            <div className="display-card reservation-summary current-reservation-card">
               <span>현재 예매 정보</span>
               <strong>{getScheduleLabel(reservation.schedule)}</strong>
               <p>{reservation.num_people}명 · {reservation.actor_name}</p>
@@ -174,9 +182,10 @@ export default function ManageReservationPage() {
             )}
 
             <div className="manage-actions">
-              <button className="primary" onClick={updateReservation} disabled={working}>수정완료</button>
-              <button className="danger-button" onClick={cancelReservation} disabled={working}><Trash2 size={17} /> 예매 취소</button>
+              <button type="button" className="secondary-action-button" onClick={cancelChange} disabled={working}>예매변경 취소</button>
+              <button type="button" className="primary" onClick={updateReservation} disabled={working}>수정완료</button>
             </div>
+            <button type="button" className="inline-danger-link" onClick={cancelReservation} disabled={working}><Trash2 size={14} /> 예매 취소</button>
           </div>
         )}
       </section>

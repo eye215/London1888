@@ -2137,3 +2137,313 @@ body{
     transform:rotate(var(--prop-rotate));
   }
 }
+
+/* Section-level floating props + softer component radius */
+.poster-prop-layer{
+  display:none!important;
+}
+
+.intro,
+.info-strip,
+.program-section,
+.message-section,
+.site-footer{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+}
+
+.intro>*:not(.content-floating-prop),
+.info-strip>*:not(.content-floating-prop),
+.program-section>*:not(.content-floating-prop),
+.message-section>*:not(.content-floating-prop),
+.site-footer>*:not(.content-floating-prop){
+  position:relative;
+  z-index:2;
+}
+
+.content-floating-prop{
+  position:absolute;
+  z-index:1;
+  display:block;
+  height:auto;
+  max-width:none;
+  pointer-events:none;
+  user-select:none;
+  opacity:.18;
+  filter:brightness(.66) contrast(1.2) saturate(.82) drop-shadow(0 22px 24px rgba(0,0,0,.6));
+  transform-origin:center;
+  animation:section-prop-float 9.5s ease-in-out infinite alternate;
+  will-change:transform;
+}
+
+.content-prop-sickle{
+  --section-prop-rotate:-9deg;
+  width:min(780px,78vw);
+  right:-18%;
+  top:-22%;
+  opacity:.16;
+  animation-duration:11s;
+}
+
+.content-prop-camera{
+  --section-prop-rotate:5deg;
+  width:min(420px,48vw);
+  right:-10%;
+  top:-54%;
+  opacity:.2;
+  animation-delay:-1.6s;
+  animation-duration:8.8s;
+}
+
+.content-prop-dagger{
+  --section-prop-rotate:-18deg;
+  width:min(920px,92vw);
+  left:-34%;
+  top:8%;
+  opacity:.14;
+  animation-delay:-2.7s;
+  animation-duration:10.4s;
+}
+
+.content-prop-typewriter{
+  --section-prop-rotate:-10deg;
+  width:min(600px,76vw);
+  right:-18%;
+  bottom:-30%;
+  opacity:.16;
+  animation-delay:-4s;
+  animation-duration:12s;
+}
+
+.content-prop-revolver{
+  --section-prop-rotate:18deg;
+  width:min(390px,58vw);
+  right:-13%;
+  bottom:-42%;
+  opacity:.2;
+  animation-delay:-3.2s;
+  animation-duration:10.8s;
+}
+
+@keyframes section-prop-float{
+  0%{transform:translate3d(-5px,9px,0) rotate(calc(var(--section-prop-rotate) - 1deg)) scale(1)}
+  50%{transform:translate3d(9px,-13px,0) rotate(calc(var(--section-prop-rotate) + 1.4deg)) scale(1.015)}
+  100%{transform:translate3d(-3px,7px,0) rotate(calc(var(--section-prop-rotate) - .4deg)) scale(.998)}
+}
+
+.primary,
+.submit-button,
+.soft-primary,
+.review-entry-button,
+.admin-action-button,
+.admin-mini-button,
+.secondary-action-button,
+.share-image-button,
+.modal-cancel,
+.text-link-button,
+.view-more-button,
+.option,
+.actor,
+.review-actor-chip,
+.reservation-tabs button,
+.review-filter-chips button,
+.privacy-check,
+.utility-card,
+.form-section,
+.message-card,
+.message-empty,
+.admin-head,
+.admin-list-panel,
+.admin-summary-card,
+.admin-schedule-cards article,
+.compact-reservation-list article.admin-reservation-card,
+.reservation-confirm-card,
+.display-card,
+.edit-control-panel,
+.duplicate-modal,
+.admin-login form{
+  border-radius:14px!important;
+}
+
+.primary,
+.submit-button,
+.soft-primary,
+.review-entry-button,
+.admin-action-button,
+.admin-mini-button,
+.secondary-action-button,
+.share-image-button,
+.modal-cancel,
+.text-link-button,
+.view-more-button{
+  border-radius:12px!important;
+}
+
+.hamburger-button,
+.quick-top-button,
+.mobile-book>button:first-child{
+  border-radius:12px!important;
+}
+
+.global-menu-primary button{
+  font-size:clamp(21px,6.4vw,42px)!important;
+  line-height:1.16!important;
+}
+
+.global-menu-bottom{
+  align-self:flex-start!important;
+  font-size:10px!important;
+  letter-spacing:.2em!important;
+  color:#6f6762!important;
+  padding:12px 0 4px!important;
+  border-bottom:1px solid #443634!important;
+}
+
+.submit-button:disabled{
+  opacity:.42!important;
+  cursor:not-allowed!important;
+  filter:saturate(.45);
+}
+
+.current-reservation-card{
+  border-color:#68242a!important;
+  background:#1b0d10!important;
+}
+
+.edit-control-panel{
+  background:#eee8df!important;
+  color:#151211!important;
+  border:1px solid #c7bdb5!important;
+  box-shadow:none!important;
+}
+
+.edit-control-panel h2,
+.edit-control-panel .field-label{
+  color:#151211!important;
+}
+
+.edit-control-panel select,
+.edit-control-panel input{
+  background:#fffaf4!important;
+  color:#151211!important;
+  border-color:#b9aea6!important;
+}
+
+.secondary-action-button{
+  min-height:54px;
+  border:1px solid #3f3330;
+  background:#14100f;
+  color:#e8ddd7;
+}
+
+.inline-danger-link{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  margin:14px auto 0;
+  border:0;
+  border-bottom:1px solid rgba(255,185,192,.55);
+  background:transparent;
+  color:#ffb9c0;
+  padding:6px 2px;
+  font-size:12px;
+}
+
+.manage-actions{
+  grid-template-columns:1fr 1fr!important;
+}
+
+.admin-schedule-cards article em{
+  display:none!important;
+}
+
+.compact-reservation-list{
+  grid-template-columns:repeat(auto-fill,minmax(230px,1fr))!important;
+}
+
+.compact-reservation-list article.admin-reservation-card{
+  padding:16px!important;
+}
+
+.admin-reservation-card header{
+  margin-bottom:10px!important;
+}
+
+.admin-reservation-card h2{
+  font-size:17px!important;
+}
+
+.admin-reservation-card dl{
+  gap:7px!important;
+}
+
+.admin-reservation-card dl div{
+  grid-template-columns:46px 1fr!important;
+}
+
+.admin-reservation-card dt{
+  font-size:10px!important;
+}
+
+.admin-reservation-card dd{
+  font-size:11px!important;
+  line-height:1.45!important;
+}
+
+.admin-reservation-card.is-deleted{
+  opacity:.42!important;
+  filter:grayscale(.6);
+}
+
+.admin-reservation-card.is-deleted header strong{
+  background:#2b2624!important;
+  color:#bdb3ad!important;
+}
+
+@media(max-width:800px){
+  .content-prop-sickle{
+    width:120vw;
+    right:-54vw;
+    top:-10%;
+  }
+
+  .content-prop-camera{
+    width:72vw;
+    right:-28vw;
+    top:-26%;
+  }
+
+  .content-prop-dagger{
+    width:150vw;
+    left:-82vw;
+    top:4%;
+  }
+
+  .content-prop-typewriter{
+    width:105vw;
+    right:-48vw;
+    bottom:-18%;
+  }
+
+  .content-prop-revolver{
+    width:76vw;
+    right:-34vw;
+    bottom:-36%;
+  }
+
+  .global-menu-primary button{
+    font-size:clamp(22px,8.4vw,34px)!important;
+  }
+
+  .global-menu-bottom{
+    font-size:10px!important;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .content-floating-prop{
+    animation:none!important;
+    transform:rotate(var(--section-prop-rotate));
+  }
+}
