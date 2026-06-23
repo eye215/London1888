@@ -92,6 +92,8 @@ begin
 end;
 $$;
 
+drop function if exists public.cancel_reservation_by_contact(text, text);
+
 create or replace function public.cancel_reservation_by_contact(p_name text, p_phone text)
 returns table(id uuid, admin_deleted_at timestamptz)
 language plpgsql
