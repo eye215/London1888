@@ -1580,3 +1580,429 @@ button{
     grid-template-columns:74px 1fr;
   }
 }
+
+/* 2026-06-23 editorial art-direction pass
+   Less "UI kit", more premium dark theatre pamphlet. */
+:root{
+  --ui-bg:#050505;
+  --ui-panel:#0d0c0c;
+  --ui-panel-2:#111010;
+  --ui-ink:#f4eee8;
+  --ui-muted:#9d918a;
+  --ui-faint:#625955;
+  --ui-line:#282221;
+  --ui-red:#a51622;
+  --ui-red-bright:#d12a38;
+}
+
+body{
+  background:var(--ui-bg)!important;
+}
+
+.section{
+  max-width:1180px;
+}
+
+.section-heading{
+  max-width:760px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.section-no,
+.eyebrow,
+.form-heading p,
+.utility-hero p,
+.cast-date-heading{
+  color:var(--ui-red-bright)!important;
+  font-size:10px!important;
+  letter-spacing:.28em!important;
+}
+
+.section h2,
+.utility-hero h1,
+.form-heading h2{
+  color:var(--ui-ink)!important;
+  letter-spacing:-.045em!important;
+}
+
+.body-copy,
+.message-intro,
+.utility-hero span,
+.form-heading>span,
+.program-section .schedule-card p{
+  color:var(--ui-muted)!important;
+}
+
+.primary,
+.submit-button,
+.admin-action-button,
+.review-entry-button,
+.danger-button,
+.modal-cancel,
+.share-image-button,
+.admin-mini-button{
+  border-radius:10px!important;
+  box-shadow:none!important;
+  font-family:'SandollHeirofBold',serif!important;
+}
+
+.primary,
+.submit-button{
+  background:var(--ui-red)!important;
+  border:1px solid #bb2935!important;
+  color:#fff!important;
+}
+
+.primary:hover,
+.submit-button:hover{
+  background:#bd1d2b!important;
+}
+
+.admin-action-button,
+.review-entry-button,
+.danger-button,
+.modal-cancel,
+.share-image-button,
+.admin-mini-button{
+  background:#0b0a0a!important;
+  border:1px solid var(--ui-line)!important;
+  color:var(--ui-ink)!important;
+}
+
+.text-link-button,
+.view-more-button,
+.text-button{
+  color:#a89c95!important;
+  text-underline-offset:5px;
+}
+
+.text-link-button:hover,
+.view-more-button:hover,
+.text-button:hover{
+  color:#fff!important;
+}
+
+.info-strip{
+  width:min(1120px,calc(100% - 32px));
+  margin:0 auto;
+  padding:0!important;
+  background:transparent!important;
+  border-top:1px solid var(--ui-line);
+  border-bottom:1px solid var(--ui-line);
+  gap:0!important;
+}
+
+.info-strip>div{
+  padding:24px 20px;
+  border-right:1px solid var(--ui-line);
+}
+
+.info-strip>div:last-child{
+  border-right:0;
+}
+
+.info-strip svg{
+  width:18px;
+  height:18px;
+  color:var(--ui-red-bright);
+  opacity:1!important;
+}
+
+.info-strip span{
+  color:var(--ui-faint);
+}
+
+.info-strip strong{
+  color:var(--ui-ink);
+  font-size:14px!important;
+}
+
+.program-section{
+  max-width:none!important;
+  background:#070707!important;
+  border-top:1px solid #181414;
+  border-bottom:1px solid #181414;
+}
+
+.cast-list{
+  width:min(1080px,100%);
+  margin:0 auto;
+  padding:0!important;
+  border:0!important;
+  border-top:1px solid var(--ui-line)!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+
+.cast-schedule-row{
+  grid-template-columns:minmax(0,360px) 1fr!important;
+  min-height:0!important;
+  padding:32px 0!important;
+  border-top:0!important;
+  border-bottom:1px solid var(--ui-line)!important;
+  gap:32px!important;
+}
+
+.cast-session-block{
+  display:grid;
+  gap:14px;
+}
+
+.cast-schedule-chips{
+  display:flex!important;
+  flex-wrap:wrap;
+  gap:8px!important;
+  width:100%!important;
+}
+
+.cast-schedule-chip{
+  min-height:30px!important;
+  width:auto!important;
+  padding:0 10px!important;
+  border:1px solid #3a302f!important;
+  border-radius:6px!important;
+  background:#0b0b0b!important;
+  color:#d8d0ca!important;
+  font-size:11px!important;
+  letter-spacing:.04em!important;
+}
+
+.cast-schedule-chip::before{
+  display:none!important;
+}
+
+.cast-members{
+  display:flex;
+  align-items:center;
+}
+
+.cast-members h3{
+  margin:0!important;
+  color:#e8ded8!important;
+  font-size:clamp(15px,1.7vw,21px)!important;
+  line-height:1.85!important;
+  letter-spacing:.015em!important;
+  word-spacing:.05em!important;
+}
+
+.message-section{
+  background:#050505!important;
+}
+
+.message-actions{
+  margin-top:-8px!important;
+  margin-bottom:36px!important;
+}
+
+.message-grid{
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:10px!important;
+  width:min(1180px,100%)!important;
+}
+
+.message-card,
+.message-empty{
+  min-height:210px!important;
+  padding:18px!important;
+  border:1px solid var(--ui-line)!important;
+  border-radius:0!important;
+  background:#0b0a0a!important;
+  box-shadow:none!important;
+}
+
+.message-card:hover{
+  transform:none!important;
+  border-color:#4a3335!important;
+}
+
+.message-card>div{
+  color:#d23a47!important;
+  font-size:10px!important;
+  letter-spacing:.08em!important;
+}
+
+.message-card>p{
+  margin:18px 0!important;
+  color:#e2d7d0!important;
+  font-size:13px!important;
+  line-height:1.75!important;
+}
+
+.message-card footer{
+  border-top:1px solid #211b1a;
+  padding-top:11px;
+}
+
+.utility-page,
+.booking-page,
+.admin-page{
+  background:#050505!important;
+}
+
+.booking-header{
+  height:62px!important;
+  border-bottom:1px solid var(--ui-line)!important;
+  background:#050505!important;
+}
+
+.utility-card,
+.form-section,
+.admin-head,
+.admin-list-panel,
+.admin-summary-card,
+.admin-schedule-cards article,
+.compact-reservation-list article.admin-reservation-card,
+.reservation-confirm-card,
+.display-card,
+.edit-control-panel,
+.privacy-box{
+  border-radius:0!important;
+  background:var(--ui-panel)!important;
+  border:1px solid var(--ui-line)!important;
+  box-shadow:none!important;
+}
+
+.form-panel{
+  background:#080808!important;
+}
+
+.form-section{
+  padding:26px!important;
+}
+
+.form-section>header{
+  border-bottom:1px solid var(--ui-line)!important;
+}
+
+.field input,
+.field textarea,
+.field select,
+.admin-edit-form input,
+.admin-edit-form select{
+  border-radius:0!important;
+  border:1px solid #332c2b!important;
+  background:#060606!important;
+}
+
+.option,
+.actor,
+.review-actor-chip,
+.reservation-tabs button,
+.review-filter-chips button,
+.privacy-check{
+  border-radius:0!important;
+  background:#090909!important;
+  border:1px solid #322b2a!important;
+}
+
+.option.selected,
+.actor.selected,
+.review-actor-chip.selected,
+.reservation-tabs button.active,
+.review-filter-chips button.active,
+.privacy-check.checked{
+  background:#1a0b0d!important;
+  border-color:#9f1b27!important;
+  color:#fff!important;
+}
+
+.option{
+  min-height:78px!important;
+}
+
+.actor{
+  min-height:54px!important;
+}
+
+.hamburger-button,
+.quick-top-button,
+.mobile-book>button:first-child{
+  border-radius:0!important;
+}
+
+.global-menu-layer{
+  background:#050505!important;
+}
+
+.global-menu-primary button,
+.global-menu-bottom{
+  border-bottom:1px solid var(--ui-line)!important;
+  font-size:clamp(26px,8vw,54px)!important;
+}
+
+.mobile-book{
+  background:#050505!important;
+  border-top:1px solid #2a2221!important;
+  box-shadow:none!important;
+}
+
+.mobile-book .primary,
+.mobile-book .review-entry-button{
+  border-radius:0!important;
+}
+
+.admin-summary-card{
+  overflow:hidden;
+}
+
+.admin-summary-card>div{
+  border-color:var(--ui-line)!important;
+}
+
+.admin-tools h2{
+  color:var(--ui-ink);
+}
+
+.admin-reservation-card header strong{
+  border-radius:0!important;
+  background:#1a0b0d!important;
+}
+
+.private-review-card{
+  border-radius:0!important;
+  background:#0b0a0a!important;
+  box-shadow:none!important;
+}
+
+@media(max-width:800px){
+  .section{
+    padding-left:18px!important;
+    padding-right:18px!important;
+  }
+
+  .info-strip{
+    width:calc(100% - 36px);
+    grid-template-columns:1fr!important;
+  }
+
+  .info-strip>div{
+    border-right:0;
+    border-bottom:1px solid var(--ui-line);
+  }
+
+  .info-strip>div:last-child{
+    border-bottom:0;
+  }
+
+  .cast-schedule-row{
+    grid-template-columns:1fr!important;
+    gap:18px!important;
+  }
+
+  .message-grid{
+    grid-template-columns:1fr!important;
+    gap:12px!important;
+  }
+
+  .message-card,
+  .message-empty{
+    min-height:168px!important;
+    padding:20px!important;
+  }
+
+  .form-section{
+    padding:20px 16px!important;
+  }
+}
