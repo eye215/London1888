@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ArrowLeft, Check, ChevronRight } from 'lucide-react';
 import { allActors, cast, getScheduleLabel, schedules } from '../data/show';
+import { TEAM_ACTOR_NAME, getActorDisplayName, isTeamActor } from '../lib/actors';
 import { isDatabaseConfigured, supabase } from '../lib/supabase';
 import { syncGoogleSheet } from '../lib/googleSheet';
 
@@ -35,26 +36,15 @@ const maskName = (value: string) => {
 
 const getLast4 = (phone: string) => phone.replace(/\D/g, '').slice(-4);
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`.replace(/\/+/g, '/');
-
 const errorOrder: (keyof FormData)[] = ['name', 'numPeople', 'phone', 'phoneConfirm', 'schedule', 'actors'];
 
 export default function BookingPage() {
-  const [form, setForm] = useState<FormData>({
-    name: '',
-    numPeople: '',
-    phone: '',
-    phoneConfirm: '',
-    schedule: '',
-    actors: [],
-    message: '',
-  });
+  const [form, setForm] = useState<FormData>({ name: '', numPeople: '', phone: '', phoneConfirm: '', schedule: '', actors: [], message: '' });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [existingReservation, setExistingReservation] = useState<ExistingReservation | null>(null);
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-  }, []);
+  useEffect(() => window.scrollTo({ top: 0, left: 0, behavior: 'auto' }), []);
 
   const selectedSchedule = useMemo(() => schedules.find(s => s.value === form.schedule), [form.schedule]);
   const actorChoices = useMemo(() => {
@@ -71,8 +61,13 @@ export default function BookingPage() {
     setErrors(prev => ({ ...prev, [key]: '' }));
   };
 
+  const toggleAllActors = () => {
+    update('actors', isTeamActor(form.actors) ? [] : [TEAM_ACTOR_NAME]);
+  };
+
   const toggleActor = (name: string) => {
-    update('actors', form.actors.includes(name) ? form.actors.filter(a => a !== name) : [...form.actors, name]);
+    const base = isTeamActor(form.actors) ? [] : form.actors;
+    update('actors', base.includes(name) ? base.filter(a => a !== name) : [...base, name]);
   };
 
   const scrollToFirstError = (next: Record<string, string>) => {
@@ -119,7 +114,7 @@ export default function BookingPage() {
         return;
       }
 
-      const actorNames = form.actors.join(', ');
+      const actorNames = getActorDisplayName(form.actors);
       const reservationId = crypto.randomUUID();
       const { error } = await supabase.from('reservations').insert({
         id: reservationId,
@@ -258,8 +253,13 @@ export default function BookingPage() {
                   {selectedSchedule ? `CAST ${selectedSchedule.cast} · 배역 6명 / 앙상블 5명` : '공연 스케줄을 먼저 선택해주세요.'}
                 </p>
                 <div className="actor-grid">
+                  <button type="button" disabled={!selectedSchedule} onClick={toggleAllActors} className={isTeamActor(form.actors) ? 'actor selected all-actor' : 'actor all-actor'}>
+                    <span>{isTeamActor(form.actors) && <Check size={14} />}</span>
+                    <b>전체선택</b>
+                    <small>팀 전체</small>
+                  </button>
                   {actorChoices.map(({ name, role }) => (
-                    <button type="button" disabled={!selectedSchedule} key={`${name}-${role}`} onClick={() => toggleActor(name)} className={form.actors.includes(name) ? 'actor selected' : 'actor'}>
+                    <button type="button" disabled={!selectedSchedule || isTeamActor(form.actors)} key={`${name}-${role}`} onClick={() => toggleActor(name)} className={form.actors.includes(name) ? 'actor selected' : 'actor'}>
                       <span>{form.actors.includes(name) && <Check size={14} />}</span>
                       <b>{name}</b>
                       <small>{role}</small>

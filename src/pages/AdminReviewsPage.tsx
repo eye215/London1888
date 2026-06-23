@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ArrowLeft, Lock, Search } from 'lucide-react';
+import { ArrowLeft, Lock } from 'lucide-react';
 import { allActors, getScheduleLabel } from '../data/show';
 import { supabase } from '../lib/supabase';
 
 const ADMIN_PASSWORD = 'Dkdlen28!';
+const ADMIN_SESSION_KEY = 'london1888AdminAuthed';
 
 type PrivateReview = {
   id: string;
@@ -16,7 +17,7 @@ type PrivateReview = {
 
 export default function AdminReviewsPage() {
   const [password, setPassword] = useState('');
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(() => localStorage.getItem(ADMIN_SESSION_KEY) === 'true');
   const [reviews, setReviews] = useState<PrivateReview[]>([]);
   const [actor, setActor] = useState('');
   const [loading, setLoading] = useState(false);
@@ -39,9 +40,19 @@ export default function AdminReviewsPage() {
 
   const filtered = useMemo(() => actor ? reviews.filter(review => review.actor_name === actor) : reviews, [reviews, actor]);
 
+  const login = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (password !== ADMIN_PASSWORD) {
+      alert('비밀번호가 일치하지 않습니다.');
+      return;
+    }
+    localStorage.setItem(ADMIN_SESSION_KEY, 'true');
+    setLoggedIn(true);
+  };
+
   if (!loggedIn) return (
     <main className="admin-login">
-      <form onSubmit={e => { e.preventDefault(); if (password === ADMIN_PASSWORD) setLoggedIn(true); else alert('비밀번호가 일치하지 않습니다.'); }}>
+      <form onSubmit={login}>
         <Lock /><p>1888 · CAST ONLY</p><h1>공연 후기 열람</h1>
         <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="비밀번호" />
         <button className="primary">확인</button>
@@ -55,7 +66,10 @@ export default function AdminReviewsPage() {
       <div className="admin-head">
         <button className="text-button" onClick={() => window.location.hash = '#/admin'}><ArrowLeft /> 예매 관리</button>
         <div><p>1888 CAST ROOM</p><h1>공연 후기</h1></div>
-        <label className="admin-search"><Search size={16} /><select value={actor} onChange={e => setActor(e.target.value)}><option value="">전체 배우</option>{allActors.map(name => <option key={name}>{name}</option>)}</select></label>
+        <div className="review-filter-chips">
+          <button className={!actor ? 'active' : ''} onClick={() => setActor('')}>전체</button>
+          {allActors.map(name => <button key={name} className={actor === name ? 'active' : ''} onClick={() => setActor(name)}>{name}</button>)}
+        </div>
       </div>
       <section className="private-review-list">
         {loading && <div className="admin-empty">후기를 불러오는 중입니다.</div>}
@@ -63,9 +77,15 @@ export default function AdminReviewsPage() {
         {!loading && !error && filtered.length === 0 && <div className="admin-empty"><span>NO REVIEWS YET</span><h3>아직 등록된 공연 후기가 없습니다.</h3></div>}
         {filtered.map(review => (
           <article className="private-review-card" key={review.id}>
-            <header><strong>TO. {review.actor_name}</strong><time>{new Date(review.created_at).toLocaleString('ko-KR')}</time></header>
+            <header>
+              <strong>TO. {review.actor_name}</strong>
+              <small>{getScheduleLabel(review.schedule)}</small>
+            </header>
             <p>{review.review_content}</p>
-            <footer><span>from, {review.author_display}</span><small>{getScheduleLabel(review.schedule)}</small></footer>
+            <footer>
+              <span>from, {review.author_display}</span>
+              <time>{new Date(review.created_at).toLocaleString('ko-KR')}</time>
+            </footer>
           </article>
         ))}
       </section>

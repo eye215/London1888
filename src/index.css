@@ -241,6 +241,48 @@ body{background:#060505;color:#efe8e2}
   .admin-search select{width:100%}.private-review-card{padding:19px 16px}.private-review-card header,.private-review-card footer{align-items:flex-start;flex-direction:column;gap:7px}
 }
 
+/* 2026-06-23 interaction polish */
+.compact-hero .poster-dagger{top:29%;width:78%;left:11%}
+.all-actor{border-style:solid;background:linear-gradient(135deg,#251013,#0b0909)!important}
+.all-actor b{color:#ffdde0}
+.review-chip-grid,.review-filter-chips{display:flex;flex-wrap:wrap;gap:8px}
+.review-actor-chip,.review-filter-chips button{
+  min-height:38px;
+  padding:0 13px;
+  border:1px solid #3c302e;
+  border-radius:999px;
+  background:#0a0808;
+  color:#d9d0ca;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  font-size:12px;
+}
+.review-actor-chip.selected,.review-filter-chips button.active{
+  border-color:#c42b38;
+  background:#2a0d11;
+  color:#fff;
+}
+.review-actor-chip:disabled{opacity:.35}
+.admin-head .review-filter-chips{max-width:520px;justify-content:flex-end}
+.private-review-card header{align-items:flex-start}
+.private-review-card header small{margin-left:auto;color:#c8bdb7;font-size:11px;letter-spacing:.04em;white-space:nowrap}
+.private-review-card footer{border-top:1px solid #302625;padding-top:14px}
+.private-review-card footer time{margin-left:auto;color:#766d68;font-size:10px}
+.admin-summary-card .latest-summary strong{font-size:clamp(17px,2.1vw,26px);white-space:nowrap}
+.reservation-admin-panel .admin-schedule-cards.in-panel{margin:0 0 20px}
+.reservation-admin-panel .reservation-tabs{padding-top:18px;border-top:1px solid #2f2524}
+
+@media(max-width:800px){
+  .compact-hero .poster-dagger{top:32%;width:86%;left:7%}
+  .admin-head .review-filter-chips{justify-content:flex-start;max-width:none}
+  .review-filter-chips button{font-size:11px;min-height:34px;padding:0 10px}
+  .private-review-card header small{margin-left:0;white-space:normal}
+  .private-review-card footer time{margin-left:0}
+  .admin-summary-card .latest-summary strong{font-size:12px;letter-spacing:-.02em}
+}
+
 /* 2026-06-23 style guide reset: tighter black/red system */
 .toast{
   top:auto;

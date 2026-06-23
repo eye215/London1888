@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ArrowLeft, Check, Send } from 'lucide-react';
 import { cast, schedules } from '../data/show';
+import { TEAM_ACTOR_NAME } from '../lib/actors';
 import { supabase } from '../lib/supabase';
 
 type ReviewAccess = {
@@ -80,10 +81,13 @@ export default function ReviewPage() {
         <form onSubmit={submit}>
           <div className="field">
             <span className="field-label">후기를 남길 배우</span>
-            <div className="actor-grid supporter-actor-grid">
+            <div className="review-chip-grid">
+              <button type="button" onClick={() => setActorName(actorName === TEAM_ACTOR_NAME ? '' : TEAM_ACTOR_NAME)} className={actorName === TEAM_ACTOR_NAME ? 'review-actor-chip selected' : 'review-actor-chip'}>
+                {actorName === TEAM_ACTOR_NAME && <Check size={14} />} 전체선택
+              </button>
               {actors.map(name => (
-                <button type="button" key={name} onClick={() => setActorName(name)} className={actorName === name ? 'actor selected' : 'actor'}>
-                  <span>{actorName === name && <Check size={14} />}</span><b>{name}</b><small>배우</small>
+                <button type="button" key={name} disabled={actorName === TEAM_ACTOR_NAME} onClick={() => setActorName(actorName === name ? '' : name)} className={actorName === name ? 'review-actor-chip selected' : 'review-actor-chip'}>
+                  {actorName === name && <Check size={14} />} {name}
                 </button>
               ))}
             </div>

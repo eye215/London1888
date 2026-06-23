@@ -14,6 +14,7 @@ type PublicMessage = {
 
 const FIRST_SHOW_DATE = new Date('2026-07-25T13:00:00+09:00');
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`.replace(/\/+/g, '/');
+const go = (hash: string) => { window.location.hash = hash; };
 
 export default function HomePage() {
   const [messages, setMessages] = useState<PublicMessage[]>([]);
@@ -141,12 +142,8 @@ export default function HomePage() {
         </div>
 
         <div className="message-actions">
-          <button className="primary soft-primary" onClick={() => window.location.hash = '#/booking'}>
-            예매하여 메시지 남기기
-          </button>
-          <button className="text-link-button" onClick={() => window.location.hash = '#/support'}>
-            관람이 어려우신가요? 응원만 남겨주세요
-          </button>
+          <button type="button" className="primary soft-primary" onClick={() => go('#/booking')}>예매하여 메시지 남기기</button>
+          <button type="button" className="text-link-button" onClick={() => go('#/support')}>관람이 어려우신가요? 응원만 남겨주세요</button>
         </div>
 
         {messages.length > 0 ? (
@@ -188,9 +185,9 @@ export default function HomePage() {
       </footer>
 
       <div className="mobile-book">
-        <button onClick={share} aria-label="공유하기"><Share2 /></button>
-        <button className="review-entry-button" onClick={() => window.location.hash = '#/review-check'}><MessageSquareText size={17} /> 공연후기</button>
-        <button className="primary" onClick={() => window.location.hash = '#/booking'}><Ticket size={18} /> 예매하기</button>
+        <button type="button" onClick={share} aria-label="공유하기"><Share2 /></button>
+        <button type="button" className="review-entry-button" onClick={() => go('#/review-check')}><MessageSquareText size={17} /> 공연후기</button>
+        <button type="button" className="primary" onClick={() => go('#/booking')}><Ticket size={18} /> 예매하기</button>
       </div>
 
       <button className={showTopButton ? 'quick-top-button visible' : 'quick-top-button'} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="최상단으로 이동">

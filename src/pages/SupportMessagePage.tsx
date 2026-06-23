@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ArrowLeft, Check, Heart } from 'lucide-react';
 import { allActors } from '../data/show';
+import { TEAM_ACTOR_NAME } from '../lib/actors';
 import { isDatabaseConfigured, supabase } from '../lib/supabase';
 
 export default function SupportMessagePage() {
@@ -63,8 +64,13 @@ export default function SupportMessagePage() {
           <div className="field">
             <span className="field-label">응원할 배우</span>
             <div className="actor-grid supporter-actor-grid">
+              <button type="button" onClick={() => setActorName(actorName === TEAM_ACTOR_NAME ? '' : TEAM_ACTOR_NAME)} className={actorName === TEAM_ACTOR_NAME ? 'actor selected all-actor' : 'actor all-actor'}>
+                <span>{actorName === TEAM_ACTOR_NAME && <Check size={14} />}</span>
+                <b>전체선택</b>
+                <small>팀 전체</small>
+              </button>
               {allActors.map(name => (
-                <button type="button" key={name} onClick={() => setActorName(name)} className={actorName === name ? 'actor selected' : 'actor'}>
+                <button type="button" key={name} disabled={actorName === TEAM_ACTOR_NAME} onClick={() => setActorName(actorName === name ? '' : name)} className={actorName === name ? 'actor selected' : 'actor'}>
                   <span>{actorName === name && <Check size={14} />}</span>
                   <b>{name}</b>
                   <small>배우</small>
@@ -79,7 +85,7 @@ export default function SupportMessagePage() {
             <div className="counter">{message.length} / 300</div>
           </label>
           {status && <p className="status-message">{status}</p>}
-          <button className="submit-button" disabled={submitting}><Heart size={18} /> 응원메세지 남기기</button>
+          <button type="submit" className="submit-button" disabled={submitting}><Heart size={18} /> {submitting ? '저장 중' : '응원메세지 남기기'}</button>
         </form>
       </section>
     </main>

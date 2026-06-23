@@ -14,11 +14,12 @@ type Reservation = {
 };
 
 const ADMIN_PASSWORD = 'Dkdlen28!';
+const ADMIN_SESSION_KEY = 'london1888AdminAuthed';
 const SEATS_PER_SHOW = 589;
 
 export default function AdminPage() {
   const [password, setPassword] = useState('');
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(() => localStorage.getItem(ADMIN_SESSION_KEY) === 'true');
   const [items, setItems] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState(false);
   const [loadError, setLoadError] = useState('');
@@ -58,10 +59,20 @@ export default function AdminPage() {
     return items.filter(item => item.schedule === activeSchedule);
   }, [items, activeSchedule]);
 
+  const login = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (password !== ADMIN_PASSWORD) {
+      alert('비밀번호가 일치하지 않습니다.');
+      return;
+    }
+    localStorage.setItem(ADMIN_SESSION_KEY, 'true');
+    setLoggedIn(true);
+  };
+
   if (!loggedIn) {
     return (
       <main className="admin-login">
-        <form onSubmit={e => { e.preventDefault(); if (password === ADMIN_PASSWORD) setLoggedIn(true); else alert('비밀번호가 일치하지 않습니다.'); }}>
+        <form onSubmit={login}>
           <Lock />
           <p>1888 · ADMIN</p>
           <h1>관리자 로그인</h1>
@@ -103,30 +114,28 @@ export default function AdminPage() {
       <section className="admin-summary-card">
         <div><span>총 예매</span><strong>{items.length}</strong><small>건</small></div>
         <div><span>총 관람 인원</span><strong>{totalPeople}</strong><small>명</small></div>
-        <div><span>최근 예매</span><strong>{latest}</strong><small>updated</small></div>
+        <div className="latest-summary"><span>최근 예매</span><strong>{latest}</strong><small>updated</small></div>
       </section>
 
-      <section className="admin-schedule-cards">
-        {scheduleStats.map(({ schedule, count, people, remain }) => {
-          const visibleNames = cast[schedule.cast].main.filter(name => !['유리', '흥섭', '준범'].includes(name));
-          return (
-            <article key={schedule.value}>
-              <header>
-                <strong>{schedule.date} {schedule.time}</strong>
-              </header>
-              <div className="seat-line"><span>{count}건 · {people}명</span><b>{remain.toLocaleString()}석 남음</b></div>
-              <em>{visibleNames.join(' · ')}</em>
-            </article>
-          );
-        })}
-      </section>
-
-      <section className="admin-list-panel">
+      <section className="admin-list-panel reservation-admin-panel">
         <div className="admin-tools">
           <div>
             <h2>Reservation List</h2>
-            <p>회차 탭을 선택하면 해당 날짜/시간의 예매만 확인할 수 있습니다.</p>
+            <p>회차별 예매 현황과 예매 리스트를 한 화면에서 확인합니다.</p>
           </div>
+        </div>
+
+        <div className="admin-schedule-cards in-panel">
+          {scheduleStats.map(({ schedule, count, people, remain }) => {
+            const visibleNames = cast[schedule.cast].main.filter(name => !['유리', '흥섭', '준범'].includes(name));
+            return (
+              <article key={schedule.value}>
+                <header><strong>{schedule.date} {schedule.time}</strong></header>
+                <div className="seat-line"><span>{count}건 · {people}명</span><b>{remain.toLocaleString()}석 남음</b></div>
+                <em>{visibleNames.join(' · ')}</em>
+              </article>
+            );
+          })}
         </div>
 
         <div className="reservation-tabs">
