@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
-import { ArrowLeft, Lock } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { ArrowLeft, Lock, RefreshCw } from 'lucide-react';
 import { allActors, getScheduleLabel } from '../data/show';
 import { supabase } from '../lib/supabase';
 
-const ADMIN_PASSWORD = 'Dkdlen28!';
+const ADMIN_PASSWORD = 'Dkdlen33!';
 const ADMIN_SESSION_KEY = 'london1888AdminAuthed';
 
 type PrivateReview = {
@@ -17,26 +17,31 @@ type PrivateReview = {
 
 export default function AdminReviewsPage() {
   const [password, setPassword] = useState('');
-  const [loggedIn, setLoggedIn] = useState(() => localStorage.getItem(ADMIN_SESSION_KEY) === 'true');
+  const [loggedIn, setLoggedIn] = useState(() => sessionStorage.getItem(ADMIN_SESSION_KEY) === 'true');
   const [reviews, setReviews] = useState<PrivateReview[]>([]);
   const [actor, setActor] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  useEffect(() => {
+  const loadReviews = useCallback(async () => {
     if (!loggedIn) return;
     setLoading(true);
     setError('');
-    void supabase.rpc('list_reviews_admin', { p_password: ADMIN_PASSWORD }).then(({ data, error: loadError }) => {
-      if (loadError) {
-        console.error(loadError);
-        setError(`후기 데이터를 불러오지 못했습니다. ${loadError.message}`);
-      } else {
-        setReviews((data || []) as PrivateReview[]);
-      }
+    try {
+      const { data, error: loadError } = await supabase.rpc('list_reviews_admin', { p_password: ADMIN_PASSWORD });
+      if (loadError) throw loadError;
+      setReviews((data || []) as PrivateReview[]);
+    } catch (loadError) {
+      console.error(loadError);
+      setError(loadError instanceof Error ? `후기 데이터를 불러오지 못했습니다. ${loadError.message}` : '후기 데이터를 불러오지 못했습니다.');
+    } finally {
       setLoading(false);
-    });
+    }
   }, [loggedIn]);
+
+  useEffect(() => {
+    void loadReviews();
+  }, [loadReviews]);
 
   const filtered = useMemo(() => actor ? reviews.filter(review => review.actor_name === actor) : reviews, [reviews, actor]);
 
@@ -46,7 +51,7 @@ export default function AdminReviewsPage() {
       alert('비밀번호가 일치하지 않습니다.');
       return;
     }
-    localStorage.setItem(ADMIN_SESSION_KEY, 'true');
+    sessionStorage.setItem(ADMIN_SESSION_KEY, 'true');
     setLoggedIn(true);
   };
 
@@ -66,11 +71,14 @@ export default function AdminReviewsPage() {
       <div className="admin-head">
         <button className="text-button" onClick={() => window.location.hash = '#/admin'}><ArrowLeft /> 예매 관리</button>
         <div><p>1888 CAST ROOM</p><h1>공연 후기</h1></div>
-        <div className="review-filter-chips">
-          <button className={!actor ? 'active' : ''} onClick={() => setActor('')}>전체</button>
-          {allActors.map(name => <button key={name} className={actor === name ? 'active' : ''} onClick={() => setActor(name)}>{name}</button>)}
-        </div>
+        <button type="button" className="admin-action-button" onClick={() => void loadReviews()} disabled={loading}><RefreshCw size={17} /> {loading ? '불러오는 중' : '새로고침'}</button>
       </div>
+
+      <section className="review-filter-chips admin-review-filter">
+        <button type="button" className={!actor ? 'active' : ''} onClick={() => setActor('')}>전체</button>
+        {allActors.map(name => <button type="button" key={name} className={actor === name ? 'active' : ''} onClick={() => setActor(name)}>{name}</button>)}
+      </section>
+
       <section className="private-review-list">
         {loading && <div className="admin-empty">후기를 불러오는 중입니다.</div>}
         {error && <div className="admin-empty warning">{error}</div>}

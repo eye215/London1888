@@ -241,6 +241,19 @@ body{background:#060505;color:#efe8e2}
   .admin-search select{width:100%}.private-review-card{padding:19px 16px}.private-review-card header,.private-review-card footer{align-items:flex-start;flex-direction:column;gap:7px}
 }
 
+/* Final admin fixes */
+.reservation-admin-panel{margin-top:22px}
+.reservation-admin-panel .in-panel-summary{margin:0 0 22px}
+.reservation-admin-panel .admin-tools{padding-top:18px;border-top:1px solid #2f2524}
+.admin-summary-card .latest-summary strong{font-size:clamp(20px,2.5vw,30px)}
+.admin-action-button:disabled{opacity:.55;cursor:wait}
+.admin-review-filter{width:min(1120px,100%);margin:18px auto 0}
+
+@media(max-width:800px){
+  .admin-summary-card .latest-summary strong{font-size:15px;letter-spacing:-.03em}
+  .reservation-admin-panel .in-panel-summary{margin-bottom:18px}
+}
+
 /* 2026-06-23 interaction polish */
 .compact-hero .poster-dagger{top:29%;width:78%;left:11%}
 .all-actor{border-style:solid;background:linear-gradient(135deg,#251013,#0b0909)!important}

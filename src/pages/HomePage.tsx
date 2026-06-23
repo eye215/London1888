@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ArrowUp, CalendarDays, Clock3, Heart, MapPin, MessageSquareText, Share2, Ticket } from 'lucide-react';
 import { cast } from '../data/show';
 import { supabase } from '../lib/supabase';
@@ -14,7 +14,15 @@ type PublicMessage = {
 
 const FIRST_SHOW_DATE = new Date('2026-07-25T13:00:00+09:00');
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`.replace(/\/+/g, '/');
-const go = (hash: string) => { window.location.hash = hash; };
+
+const go = (hash: string) => {
+  if (window.location.hash === hash) {
+    window.dispatchEvent(new HashChangeEvent('hashchange'));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+  window.location.hash = hash;
+};
 
 export default function HomePage() {
   const [messages, setMessages] = useState<PublicMessage[]>([]);
@@ -32,6 +40,21 @@ export default function HomePage() {
     return '공연 종료';
   }, []);
 
+  const loadMessages = useCallback(async (attempt = 1) => {
+    const { data, error } = await supabase
+      .from('public_messages')
+      .select('id, actor_name, message, author_display, source, created_at')
+      .order('created_at', { ascending: false })
+      .limit(100);
+
+    if (error) {
+      console.error(error);
+      if (attempt < 2) window.setTimeout(() => void loadMessages(attempt + 1), 700);
+      return;
+    }
+    setMessages((data || []) as PublicMessage[]);
+  }, []);
+
   useEffect(() => {
     const savedToast = localStorage.getItem('toastMessage');
     if (savedToast) {
@@ -39,16 +62,8 @@ export default function HomePage() {
       localStorage.removeItem('toastMessage');
       window.setTimeout(() => setToast(''), 3600);
     }
-
-    supabase
-      .from('public_messages')
-      .select('id, actor_name, message, author_display, source, created_at')
-      .order('created_at', { ascending: false })
-      .limit(100)
-      .then(({ data, error }) => {
-        if (!error) setMessages((data || []) as PublicMessage[]);
-      });
-  }, []);
+    void loadMessages();
+  }, [loadMessages]);
 
   useEffect(() => {
     const onScroll = () => setShowTopButton(window.scrollY > 12);

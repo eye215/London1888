@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ArrowLeft, Download, Lock, MessageSquareText, RefreshCw } from 'lucide-react';
 import { cast, getCompactScheduleLabel, schedules } from '../data/show';
 import { isDatabaseConfigured, supabase } from '../lib/supabase';
@@ -13,38 +13,42 @@ type Reservation = {
   created_at: string;
 };
 
-const ADMIN_PASSWORD = 'Dkdlen28!';
+const ADMIN_PASSWORD = 'Dkdlen33!';
 const ADMIN_SESSION_KEY = 'london1888AdminAuthed';
 const SEATS_PER_SHOW = 589;
 
 export default function AdminPage() {
   const [password, setPassword] = useState('');
-  const [loggedIn, setLoggedIn] = useState(() => localStorage.getItem(ADMIN_SESSION_KEY) === 'true');
+  const [loggedIn, setLoggedIn] = useState(false);
   const [items, setItems] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState(false);
   const [loadError, setLoadError] = useState('');
   const [activeSchedule, setActiveSchedule] = useState('all');
 
-  const loadReservations = () => {
+  const loadReservations = useCallback(async () => {
     if (!loggedIn) return;
     if (!isDatabaseConfigured) {
       setLoadError('Supabase 연결 정보가 없습니다. 배포 환경변수를 확인해주세요.');
       return;
     }
+
     setLoading(true);
     setLoadError('');
-    void supabase.rpc('list_reservations_admin', { p_password: ADMIN_PASSWORD }).then(({ data, error }) => {
-      if (error) {
-        console.error(error);
-        setLoadError(`예매 데이터를 불러오지 못했습니다. ${error.message}`);
-      } else {
-        setItems((data || []) as Reservation[]);
-      }
+    try {
+      const { data, error } = await supabase.rpc('list_reservations_admin', { p_password: ADMIN_PASSWORD });
+      if (error) throw error;
+      setItems((data || []) as Reservation[]);
+    } catch (error) {
+      console.error(error);
+      setLoadError(error instanceof Error ? `예매 데이터를 불러오지 못했습니다. ${error.message}` : '예매 데이터를 불러오지 못했습니다.');
+    } finally {
       setLoading(false);
-    });
-  };
+    }
+  }, [loggedIn]);
 
-  useEffect(loadReservations, [loggedIn]);
+  useEffect(() => {
+    void loadReservations();
+  }, [loadReservations]);
 
   const totalPeople = items.reduce((sum, item) => sum + item.num_people, 0);
   const latest = items[0] ? new Date(items[0].created_at).toLocaleDateString('ko-KR') : '-';
@@ -65,7 +69,7 @@ export default function AdminPage() {
       alert('비밀번호가 일치하지 않습니다.');
       return;
     }
-    localStorage.setItem(ADMIN_SESSION_KEY, 'true');
+    sessionStorage.setItem(ADMIN_SESSION_KEY, 'true');
     setLoggedIn(true);
   };
 
@@ -105,23 +109,23 @@ export default function AdminPage() {
           <h1>예매 관리</h1>
         </div>
         <div className="admin-head-actions">
-          <button className="admin-action-button" onClick={() => window.location.hash = '#/admin/reviews'}><MessageSquareText size={17} /> 공연후기</button>
-          <button className="admin-action-button" onClick={download} disabled={!items.length}><Download size={17} /> CSV</button>
-          <button className="admin-action-button" onClick={loadReservations} disabled={loading}><RefreshCw size={17} /> 새로고침</button>
+          <button type="button" className="admin-action-button" onClick={() => window.location.hash = '#/admin/reviews'}><MessageSquareText size={17} /> 공연후기</button>
+          <button type="button" className="admin-action-button" onClick={download} disabled={!items.length}><Download size={17} /> CSV</button>
+          <button type="button" className="admin-action-button" onClick={() => void loadReservations()} disabled={loading}><RefreshCw size={17} /> {loading ? '불러오는 중' : '새로고침'}</button>
         </div>
       </div>
 
-      <section className="admin-summary-card">
-        <div><span>총 예매</span><strong>{items.length}</strong><small>건</small></div>
-        <div><span>총 관람 인원</span><strong>{totalPeople}</strong><small>명</small></div>
-        <div className="latest-summary"><span>최근 예매</span><strong>{latest}</strong><small>updated</small></div>
-      </section>
-
       <section className="admin-list-panel reservation-admin-panel">
+        <section className="admin-summary-card in-panel-summary">
+          <div><span>총 예매</span><strong>{items.length}</strong><small>건</small></div>
+          <div><span>총 관람 인원</span><strong>{totalPeople}</strong><small>명</small></div>
+          <div className="latest-summary"><span>최근 예매</span><strong>{latest}</strong><small>updated</small></div>
+        </section>
+
         <div className="admin-tools">
           <div>
             <h2>Reservation List</h2>
-            <p>회차별 예매 현황과 예매 리스트를 한 화면에서 확인합니다.</p>
+            <p>예매 현황과 예매 리스트를 한 화면에서 확인합니다.</p>
           </div>
         </div>
 
@@ -139,9 +143,9 @@ export default function AdminPage() {
         </div>
 
         <div className="reservation-tabs">
-          <button className={activeSchedule === 'all' ? 'active' : ''} onClick={() => setActiveSchedule('all')}>전체</button>
+          <button type="button" className={activeSchedule === 'all' ? 'active' : ''} onClick={() => setActiveSchedule('all')}>전체</button>
           {schedules.map(schedule => (
-            <button key={schedule.value} className={activeSchedule === schedule.value ? 'active' : ''} onClick={() => setActiveSchedule(schedule.value)}>
+            <button type="button" key={schedule.value} className={activeSchedule === schedule.value ? 'active' : ''} onClick={() => setActiveSchedule(schedule.value)}>
               {schedule.date} · {schedule.time}
             </button>
           ))}
