@@ -67,6 +67,7 @@ html{overflow-x:hidden;overflow-y:auto;touch-action:pan-y}
 body{min-height:100%;overflow-x:hidden;overflow-y:visible;touch-action:pan-y;-webkit-overflow-scrolling:touch}
 #root{min-height:100%}
 .site-shell{overflow-x:clip;overflow-y:visible}
+.site-shell{position:relative;isolation:isolate}
 
 /* Public supporter messages */
 .message-section{max-width:none;background:linear-gradient(180deg,#0a0909,#12090a);border-top:1px solid #291e1d}
@@ -2143,6 +2144,26 @@ body{
   display:none!important;
 }
 
+.content-art-layer{
+  position:absolute;
+  z-index:1;
+  top:86svh;
+  left:0;
+  right:0;
+  bottom:0;
+  min-height:2500px;
+  overflow:hidden;
+  pointer-events:none;
+}
+
+.content-art-layer+.section,
+.content-art-layer~.section,
+.content-art-layer~.info-strip,
+.content-art-layer~.site-footer{
+  position:relative;
+  z-index:2;
+}
+
 .intro,
 .info-strip,
 .program-section,
@@ -2456,36 +2477,41 @@ body{
 
 .content-prop-sickle{
   width:min(760px,78vw)!important;
-  right:-14%!important;
-  top:-16%!important;
+  right:-12%!important;
+  top:5%!important;
   opacity:1!important;
 }
 
 .content-prop-camera{
   width:min(430px,48vw)!important;
-  right:-7%!important;
-  top:-44%!important;
+  left:-8%!important;
+  right:auto!important;
+  top:24%!important;
   opacity:1!important;
 }
 
 .content-prop-dagger{
   width:min(860px,88vw)!important;
-  left:-24%!important;
-  top:10%!important;
+  left:auto!important;
+  right:-20%!important;
+  top:43%!important;
   opacity:1!important;
 }
 
 .content-prop-typewriter{
   width:min(580px,72vw)!important;
-  right:-10%!important;
-  bottom:-24%!important;
+  left:-12%!important;
+  right:auto!important;
+  top:62%!important;
+  bottom:auto!important;
   opacity:1!important;
 }
 
 .content-prop-revolver{
   width:min(390px,52vw)!important;
-  right:-8%!important;
-  bottom:-28%!important;
+  right:-7%!important;
+  top:82%!important;
+  bottom:auto!important;
   opacity:1!important;
 }
 
@@ -2496,32 +2522,37 @@ body{
   }
 
   .content-prop-sickle{
-    width:118vw!important;
-    right:-38vw!important;
-    top:0!important;
+    width:108vw!important;
+    right:-36vw!important;
+    top:4%!important;
   }
 
   .content-prop-camera{
-    width:70vw!important;
-    right:-24vw!important;
-    top:-17%!important;
+    width:68vw!important;
+    left:-24vw!important;
+    right:auto!important;
+    top:24%!important;
   }
 
   .content-prop-dagger{
-    width:136vw!important;
-    left:-58vw!important;
-    top:8%!important;
+    width:132vw!important;
+    left:auto!important;
+    right:-56vw!important;
+    top:44%!important;
   }
 
   .content-prop-typewriter{
-    width:100vw!important;
-    right:-34vw!important;
-    bottom:-15%!important;
+    width:94vw!important;
+    left:-34vw!important;
+    right:auto!important;
+    top:64%!important;
+    bottom:auto!important;
   }
 
   .content-prop-revolver{
-    width:72vw!important;
+    width:68vw!important;
     right:-24vw!important;
-    bottom:-27%!important;
+    top:84%!important;
+    bottom:auto!important;
   }
 }

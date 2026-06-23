@@ -131,8 +131,15 @@ export default function HomePage() {
         <div className="scroll-cue">SCROLL <span /></div>
       </header>
 
+      <div className="content-art-layer" aria-hidden="true">
+        <img className="content-floating-prop content-prop-sickle" src={asset('assets/floating-sickle.png')} alt="" />
+        <img className="content-floating-prop content-prop-camera" src={asset('assets/floating-camera.png')} alt="" />
+        <img className="content-floating-prop content-prop-dagger" src={asset('assets/floating-dagger-wide.png')} alt="" />
+        <img className="content-floating-prop content-prop-typewriter" src={asset('assets/floating-typewriter.png')} alt="" />
+        <img className="content-floating-prop content-prop-revolver" src={asset('assets/floating-revolver.png')} alt="" />
+      </div>
+
       <section className="section intro">
-        <img className="content-floating-prop content-prop-sickle" src={asset('assets/floating-sickle.png')} alt="" aria-hidden="true" />
         <div>
           <p className="section-no">01 · THE STORY</p>
           <h2>멈춰 있던 밤,<br /><em>진실은 다시 심장을 뛴다.</em></h2>
@@ -144,14 +151,12 @@ export default function HomePage() {
       </section>
 
       <section className="info-strip">
-        <img className="content-floating-prop content-prop-camera" src={asset('assets/floating-camera.png')} alt="" aria-hidden="true" />
         <div><CalendarDays /><span>DATES<strong>2026. 07. 25 — 07. 26</strong></span></div>
         <div><Clock3 /><span>TIME<strong>13:00 / 16:00</strong></span></div>
         <div><MapPin /><span>VENUE<strong>공연장 추후 안내</strong></span></div>
       </section>
 
       <section className="section program-section">
-        <img className="content-floating-prop content-prop-dagger" src={asset('assets/floating-dagger-wide.png')} alt="" aria-hidden="true" />
         <div className="section-heading">
           <p className="section-no">02 · PROGRAM</p>
           <h2>공연 일정과 캐스트</h2>
@@ -178,7 +183,6 @@ export default function HomePage() {
       </section>
 
       <section className="section message-section">
-        <img className="content-floating-prop content-prop-typewriter" src={asset('assets/floating-typewriter.png')} alt="" aria-hidden="true" />
         <div className="section-heading">
           <p className="section-no">03 · MESSAGES</p>
           <h2>응원의 마음</h2>
@@ -218,7 +222,6 @@ export default function HomePage() {
       </section>
 
       <footer className="site-footer">
-        <img className="content-floating-prop content-prop-revolver" src={asset('assets/floating-revolver.png')} alt="" aria-hidden="true" />
         <div>
           <span className="footer-title">1888</span>
           <p>런던의 밤이 당신을 기다립니다.</p>
