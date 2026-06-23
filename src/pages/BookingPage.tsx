@@ -13,6 +13,7 @@ type FormData = {
   schedule: string;
   actors: string[];
   message: string;
+  privacyAgreed: boolean;
 };
 
 type ExistingReservation = {
@@ -36,10 +37,10 @@ const maskName = (value: string) => {
 
 const getLast4 = (phone: string) => phone.replace(/\D/g, '').slice(-4);
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`.replace(/\/+/g, '/');
-const errorOrder: (keyof FormData)[] = ['name', 'numPeople', 'phone', 'phoneConfirm', 'schedule', 'actors'];
+const errorOrder: (keyof FormData)[] = ['name', 'numPeople', 'phone', 'phoneConfirm', 'schedule', 'actors', 'privacyAgreed'];
 
 export default function BookingPage() {
-  const [form, setForm] = useState<FormData>({ name: '', numPeople: '', phone: '', phoneConfirm: '', schedule: '', actors: [], message: '' });
+  const [form, setForm] = useState<FormData>({ name: '', numPeople: '', phone: '', phoneConfirm: '', schedule: '', actors: [], message: '', privacyAgreed: false });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [existingReservation, setExistingReservation] = useState<ExistingReservation | null>(null);
@@ -55,8 +56,9 @@ export default function BookingPage() {
       ...currentCast.ensemble.map(name => ({ name, role: '앙상블' })),
     ];
   }, [selectedSchedule]);
+  const selectableActorNames = actorChoices.map(actor => actor.name);
 
-  const update = (key: keyof FormData, value: string | string[]) => {
+  const update = (key: keyof FormData, value: string | string[] | boolean) => {
     setForm(prev => ({ ...prev, [key]: value }));
     setErrors(prev => ({ ...prev, [key]: '' }));
   };
@@ -67,7 +69,9 @@ export default function BookingPage() {
 
   const toggleActor = (name: string) => {
     const base = isTeamActor(form.actors) ? [] : form.actors;
-    update('actors', base.includes(name) ? base.filter(a => a !== name) : [...base, name]);
+    const next = base.includes(name) ? base.filter(a => a !== name) : [...base, name];
+    const allSelected = selectableActorNames.length > 0 && selectableActorNames.every(actor => next.includes(actor));
+    update('actors', allSelected ? [TEAM_ACTOR_NAME] : next);
   };
 
   const scrollToFirstError = (next: Record<string, string>) => {
@@ -78,7 +82,7 @@ export default function BookingPage() {
     }, 30);
   };
 
-  const validate = () => {
+  const getValidationErrors = () => {
     const next: Record<string, string> = {};
     if (!form.name.trim()) next.name = '예매자 실명을 입력해주세요.';
     if (!form.numPeople || Number(form.numPeople) < 1) next.numPeople = '예매 인원은 1명 이상 입력해주세요.';
@@ -87,10 +91,18 @@ export default function BookingPage() {
     else if (form.phone !== form.phoneConfirm) next.phoneConfirm = '전화번호가 일치하지 않습니다.';
     if (!form.schedule) next.schedule = '공연 일정을 선택해주세요.';
     if (!form.actors.length) next.actors = '응원할 배우를 1명 이상 선택해주세요.';
+    if (!form.privacyAgreed) next.privacyAgreed = '개인정보 수집·이용에 동의해주세요.';
+    return next;
+  };
+
+  const validate = () => {
+    const next = getValidationErrors();
     setErrors(next);
     scrollToFirstError(next);
     return Object.keys(next).length === 0;
   };
+
+  const canSubmit = Object.keys(getValidationErrors()).length === 0 && !submitting;
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -276,7 +288,24 @@ export default function BookingPage() {
               </Field>
             </FormSection>
 
-            <button className="submit-button" disabled={submitting}>
+            <FormSection number="05" title="개인정보 수집·이용 동의" description="예매 확인과 관리를 위해 필요한 최소 정보만 수집합니다.">
+              <div className="privacy-box">
+                <p><strong>수집 항목</strong> 이름, 휴대전화번호</p>
+                <p><strong>이용 목적</strong> 공연 예매자 확인 및 관리</p>
+                <p><strong>보유 기간</strong> 공연 종료 후 1개월(2026.08.31.)까지 보관 후 즉시 파기</p>
+                <small>※ 개인정보 수집·이용에 동의하지 않을 권리가 있으나, 동의하지 않을 경우 예매 확인 및 관리가 제한될 수 있습니다.</small>
+              </div>
+              <div className="field" data-field="privacyAgreed">
+                <label className={form.privacyAgreed ? 'privacy-check checked' : 'privacy-check'}>
+                  <input type="checkbox" checked={form.privacyAgreed} onChange={e => update('privacyAgreed', e.target.checked)} />
+                  <span>{form.privacyAgreed && <Check size={14} />}</span>
+                  개인정보 수집·이용에 동의합니다.
+                </label>
+                {errors.privacyAgreed && <em className="error">{errors.privacyAgreed}</em>}
+              </div>
+            </FormSection>
+
+            <button className="submit-button" disabled={!canSubmit}>
               {submitting ? '예매 저장 중' : <>예매 완료 <ChevronRight /></>}
             </button>
           </form>

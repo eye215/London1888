@@ -1,29 +1,42 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowLeft, Check, Heart } from 'lucide-react';
 import { allActors } from '../data/show';
-import { TEAM_ACTOR_NAME } from '../lib/actors';
+import { TEAM_ACTOR_NAME, getActorDisplayName, isTeamActor } from '../lib/actors';
 import { isDatabaseConfigured, supabase } from '../lib/supabase';
 
 export default function SupportMessagePage() {
   const [nickname, setNickname] = useState('');
-  const [actorName, setActorName] = useState('');
+  const [actors, setActors] = useState<string[]>([]);
   const [message, setMessage] = useState('');
   const [status, setStatus] = useState('');
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => window.scrollTo({ top: 0, left: 0, behavior: 'auto' }), []);
+
+  const toggleAllActors = () => {
+    setActors(prev => isTeamActor(prev) ? [] : [TEAM_ACTOR_NAME]);
+  };
+
+  const toggleActor = (name: string) => {
+    const base = isTeamActor(actors) ? [] : actors;
+    const next = base.includes(name) ? base.filter(actor => actor !== name) : [...base, name];
+    const allSelected = allActors.every(actor => next.includes(actor));
+    setActors(allSelected ? [TEAM_ACTOR_NAME] : next);
+  };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('');
 
     if (!nickname.trim()) return setStatus('닉네임을 입력해주세요.');
-    if (!actorName) return setStatus('응원할 배우를 선택해주세요.');
+    if (!actors.length) return setStatus('응원할 배우를 선택해주세요.');
     if (!message.trim()) return setStatus('응원 메시지를 입력해주세요.');
     if (!isDatabaseConfigured) return setStatus('데이터베이스 연결 정보를 확인해주세요.');
 
     setSubmitting(true);
     const { error } = await supabase.from('messages').insert({
       reservation_id: null,
-      actor_name: actorName,
+      actor_name: getActorDisplayName(actors),
       message: message.trim(),
       booking_number: null,
       nickname: nickname.trim(),
@@ -64,14 +77,14 @@ export default function SupportMessagePage() {
           <div className="field">
             <span className="field-label">응원할 배우<i>*</i></span>
             <div className="actor-grid supporter-actor-grid" aria-label="응원할 배우 선택">
-              <button type="button" onClick={() => setActorName(actorName === TEAM_ACTOR_NAME ? '' : TEAM_ACTOR_NAME)} className={actorName === TEAM_ACTOR_NAME ? 'actor selected all-actor' : 'actor all-actor'}>
-                <span>{actorName === TEAM_ACTOR_NAME && <Check size={14} />}</span>
+              <button type="button" onClick={toggleAllActors} className={isTeamActor(actors) ? 'actor selected all-actor' : 'actor all-actor'}>
+                <span>{isTeamActor(actors) && <Check size={14} />}</span>
                 <b>전체선택</b>
                 <small>팀 전체</small>
               </button>
               {allActors.map(name => (
-                <button type="button" key={name} disabled={actorName === TEAM_ACTOR_NAME} onClick={() => setActorName(actorName === name ? '' : name)} className={actorName === name ? 'actor selected' : 'actor'}>
-                  <span>{actorName === name && <Check size={14} />}</span>
+                <button type="button" key={name} disabled={isTeamActor(actors)} onClick={() => toggleActor(name)} className={actors.includes(name) ? 'actor selected' : 'actor'}>
+                  <span>{actors.includes(name) && <Check size={14} />}</span>
                   <b>{name}</b>
                   <small>배우</small>
                 </button>

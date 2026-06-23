@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ArrowLeft, Download, Edit3, Lock, MessageSquareText, RefreshCw, Save, Trash2, X } from 'lucide-react';
 import { cast, getCompactScheduleLabel, schedules } from '../data/show';
 import { isDatabaseConfigured, supabase } from '../lib/supabase';
+import { syncGoogleSheet } from '../lib/googleSheet';
 
 type Reservation = {
   id: string;
@@ -129,6 +130,7 @@ export default function AdminPage() {
       });
       if (error) throw error;
       setItems(prev => prev.map(row => row.id === item.id ? { ...row, num_people: nextPeople, schedule: editSchedule } : row));
+      syncGoogleSheet({ action: 'update', id: item.id, name: item.name, phone: item.phone, numPeople: nextPeople, schedule: editSchedule, actorName: item.actor_name, message: item.message || '' });
       setEditingId('');
       setActionMessage('예매 내역이 수정되었습니다.');
     } catch (error) {
@@ -152,6 +154,7 @@ export default function AdminPage() {
       if (error) throw error;
       const deletedAt = new Date().toISOString();
       setItems(prev => prev.map(row => row.id === item.id ? { ...row, admin_deleted_at: deletedAt } : row));
+      syncGoogleSheet({ action: 'delete', id: item.id, name: item.name, phone: item.phone, schedule: item.schedule, actorName: item.actor_name, message: item.message || '' });
       setActionMessage('예매 내역이 삭제 표시되었습니다.');
     } catch (error) {
       console.error(error);

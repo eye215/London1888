@@ -29,6 +29,7 @@ export default function ManageReservationPage() {
   const selectedSchedule = useMemo(() => schedules.find(item => item.value === schedule), [schedule]);
 
   useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
     const saved = sessionStorage.getItem('reservationLookup');
     if (!saved) return;
     sessionStorage.removeItem('reservationLookup');
@@ -105,7 +106,7 @@ export default function ManageReservationPage() {
 
   const cancelReservation = async () => {
     if (!reservation) return;
-    if (!window.confirm('예매를 취소할까요? 취소한 예매 내역은 복구할 수 없습니다.')) return;
+    if (!window.confirm('예매를 취소할까요? 취소된 예매 내역은 복구할 수 없습니다.')) return;
 
     setWorking(true);
     const { data, error } = await supabase.rpc('cancel_reservation_by_contact', { p_name: name.trim(), p_phone: phone });
@@ -132,7 +133,7 @@ export default function ManageReservationPage() {
       <section className="utility-hero">
         <p>RESERVATION CARE</p>
         <h1>갑자기 일정이<br />변경되셨나요?</h1>
-        <span>예매 시 입력한 실명과 전화번호로 내역을 확인한 뒤, 인원과 관람 일정을 변경하거나 예매를 취소할 수 있습니다.</span>
+        <span>예매 시 입력한 실명과 전화번호로 내역을 확인한 뒤 인원과 관람 일정을 변경하거나 예매를 취소할 수 있습니다.</span>
       </section>
 
       <section className="utility-card">
@@ -146,23 +147,26 @@ export default function ManageReservationPage() {
 
         {reservation && (
           <div className="manage-result">
-            <div className="reservation-summary">
-              <span>확인된 예매</span>
+            <div className="display-card reservation-summary">
+              <span>현재 예매 정보</span>
               <strong>{getScheduleLabel(reservation.schedule)}</strong>
-              <p>{reservation.actor_name}</p>
+              <p>{reservation.num_people}명 · {reservation.actor_name}</p>
             </div>
 
-            <div className="field-row">
-              <Field label="예매 인원"><input type="number" min="1" value={numPeople} onChange={e => setNumPeople(e.target.value)} /></Field>
-              <Field label="관람 일정">
-                <select value={schedule} onChange={e => setSchedule(e.target.value)}>
-                  {schedules.map(item => <option key={item.value} value={item.value}>{getScheduleLabel(item.value)}</option>)}
-                </select>
-              </Field>
+            <div className="edit-control-panel">
+              <h2>변경할 정보</h2>
+              <div className="field-row">
+                <Field label="예매 인원"><input type="number" min="1" value={numPeople} onChange={e => setNumPeople(e.target.value)} /></Field>
+                <Field label="관람 일정">
+                  <select value={schedule} onChange={e => setSchedule(e.target.value)}>
+                    {schedules.map(item => <option key={item.value} value={item.value}>{getScheduleLabel(item.value)}</option>)}
+                  </select>
+                </Field>
+              </div>
             </div>
 
             {selectedSchedule && (
-              <div className="cast-preview-card">
+              <div className="cast-preview-card display-card">
                 <span>변경 선택 · CAST {selectedSchedule.cast}</span>
                 <strong>{cast[selectedSchedule.cast].main.join(' · ')}</strong>
                 <p>앙상블 · {cast[selectedSchedule.cast].ensemble.join(' · ')}</p>

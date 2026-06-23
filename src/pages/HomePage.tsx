@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { ArrowUp, CalendarDays, Clock3, Heart, MapPin, MessageSquareText, Share2, Ticket } from 'lucide-react';
+import { ArrowUp, CalendarDays, Clock3, Heart, MapPin, Menu, MessageSquareText, Share2, Ticket, X } from 'lucide-react';
 import { cast } from '../data/show';
 import { supabase } from '../lib/supabase';
 
@@ -29,6 +29,7 @@ export default function HomePage() {
   const [visibleMessageCount, setVisibleMessageCount] = useState(5);
   const [showTopButton, setShowTopButton] = useState(false);
   const [toast, setToast] = useState('');
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const dDay = useMemo(() => {
     const today = new Date();
@@ -86,12 +87,36 @@ export default function HomePage() {
     }
   };
 
+  const menuGo = (hash: string) => {
+    setMenuOpen(false);
+    go(hash);
+  };
+
   const displayedMessages = messages.slice(0, visibleMessageCount);
   const canViewMore = visibleMessageCount < messages.length;
 
   return (
     <main className="site-shell">
       {toast && <div className="toast">{toast}</div>}
+
+      <button className="hamburger-button" type="button" onClick={() => setMenuOpen(true)} aria-label="전체 메뉴 열기">
+        <Menu size={22} />
+      </button>
+
+      {menuOpen && (
+        <div className="global-menu-layer" role="dialog" aria-modal="true" aria-label="전체 메뉴">
+          <button className="global-menu-close" type="button" onClick={() => setMenuOpen(false)} aria-label="전체 메뉴 닫기"><X size={24} /></button>
+          <nav className="global-menu-nav">
+            <div className="global-menu-primary">
+              <button type="button" onClick={() => menuGo('#/booking')}>예매하기</button>
+              <button type="button" onClick={() => menuGo('#/reservation-check')}>예매내역확인</button>
+              <button type="button" onClick={() => menuGo('#/support')}>미관람자 응원메시지 남기기</button>
+              <button type="button" onClick={() => menuGo('#/review-check')}>공연후기</button>
+            </div>
+            <button className="global-menu-bottom" type="button" onClick={() => menuGo('#/manage')}>갑자기 일정이 변경되셨나요?</button>
+          </nav>
+        </div>
+      )}
 
       <header className="hero poster-hero compact-hero">
         <div className="poster-stage" aria-label="1888, 런던의 밤 공연 포스터">
@@ -195,6 +220,7 @@ export default function HomePage() {
         </div>
         <div className="footer-actions">
           <a href="#/manage">갑자기 일정이 변경되셨나요?</a>
+          <a href="#/reservation-check">예매내역확인</a>
           <a href="#/admin">ADMIN</a>
         </div>
       </footer>

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ArrowLeft, Lock, RefreshCw } from 'lucide-react';
 import { allActors, getScheduleLabel } from '../data/show';
+import { TEAM_ACTOR_NAME } from '../lib/actors';
 import { supabase } from '../lib/supabase';
 
 const ADMIN_PASSWORD = 'Dkdlen33!';
@@ -43,7 +44,10 @@ export default function AdminReviewsPage() {
     void loadReviews();
   }, [loadReviews]);
 
-  const filtered = useMemo(() => actor ? reviews.filter(review => review.actor_name === actor) : reviews, [reviews, actor]);
+  const filtered = useMemo(() => {
+    if (!actor) return reviews;
+    return reviews.filter(review => review.actor_name === TEAM_ACTOR_NAME || review.actor_name.split(',').map(name => name.trim()).includes(actor));
+  }, [reviews, actor]);
 
   const login = (event: React.FormEvent) => {
     event.preventDefault();
