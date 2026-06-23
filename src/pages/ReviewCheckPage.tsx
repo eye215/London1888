@@ -62,7 +62,7 @@ export default function ReviewCheckPage() {
 
     const schedule = found?.schedule || '2026-07-25 13:00';
     if (!isTester && !hasShowStarted(schedule)) {
-      localStorage.setItem('toastMessage', '아직 공연 후기를 입력할 수 없습니다.');
+      localStorage.setItem('toastMessage', '공연 관람 이후에 후기 입력이 가능합니다.');
       window.location.hash = '#/';
       return;
     }
@@ -87,7 +87,7 @@ export default function ReviewCheckPage() {
       <section className="utility-hero">
         <p>AFTER THE CURTAIN</p>
         <h1>당신이 목격한 밤을<br />들려주세요</h1>
-        <span>공연 후 예매자 확인을 거쳐 배우에게만 공개되는 후기를 남길 수 있습니다.</span>
+        <span>공연 관람 이후 예매 내역을 확인한 뒤 후기를 남길 수 있습니다.</span>
       </section>
       <section className="utility-card">
         <form onSubmit={submit} className="review-lookup-form">

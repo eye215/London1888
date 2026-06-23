@@ -26,7 +26,7 @@ const go = (hash: string) => {
 
 export default function HomePage() {
   const [messages, setMessages] = useState<PublicMessage[]>([]);
-  const [visibleMessageCount, setVisibleMessageCount] = useState(10);
+  const [visibleMessageCount, setVisibleMessageCount] = useState(5);
   const [showTopButton, setShowTopButton] = useState(false);
   const [toast, setToast] = useState('');
 
@@ -178,7 +178,7 @@ export default function HomePage() {
                 </article>
               ))}
             </div>
-            {canViewMore && <button className="view-more-button" onClick={() => setVisibleMessageCount(count => count + 10)}>View more +</button>}
+            {canViewMore && <button className="view-more-button" onClick={() => setVisibleMessageCount(count => count + 5)}>View more +</button>}
           </>
         ) : (
           <div className="message-empty">

@@ -1078,3 +1078,232 @@ button{
     font-size:11px;
   }
 }
+
+/* 2026-06-23 anti-tacky pass: flat premium components */
+.primary,
+.submit-button{
+  background:#a81724!important;
+  box-shadow:0 10px 24px rgba(0,0,0,.28)!important;
+}
+.primary:hover,
+.submit-button:hover{
+  background:#c02230!important;
+}
+.admin-action-button,
+.review-entry-button,
+.danger-button,
+.modal-cancel,
+.option,
+.actor,
+.review-actor-chip,
+.review-filter-chips button,
+.reservation-tabs button{
+  background:#141111!important;
+  box-shadow:none!important;
+}
+.admin-action-button:hover,
+.review-entry-button:hover,
+.modal-cancel:hover,
+.option:hover,
+.actor:hover:not(:disabled),
+.review-actor-chip:hover:not(:disabled),
+.review-filter-chips button:hover,
+.reservation-tabs button:hover{
+  background:#1d1717!important;
+}
+.option.selected,
+.actor.selected,
+.review-actor-chip.selected,
+.review-filter-chips button.active,
+.reservation-tabs button.active{
+  background:#8f111b!important;
+  box-shadow:none!important;
+}
+
+.message-card,
+.message-empty,
+.utility-card,
+.admin-login form,
+.admin-head,
+.admin-list-panel,
+.cast-list,
+.cast-preview-card,
+.duplicate-modal,
+.admin-schedule-cards article,
+.private-review-card{
+  background:#111!important;
+  box-shadow:0 14px 34px rgba(0,0,0,.22)!important;
+}
+.message-card{
+  width:100%;
+  max-width:100%;
+  overflow:hidden;
+}
+.message-grid{
+  width:min(1120px,100%);
+  padding:0;
+}
+.message-card>div span,
+.message-card footer small{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.message-card footer{
+  min-width:0;
+}
+
+.cast-schedule-chip{
+  background:#121010!important;
+  border-color:#3b2c2b!important;
+  border-left-color:#a81724!important;
+  box-shadow:none!important;
+}
+.cast-schedule-chip::before{
+  background:#a81724;
+  box-shadow:none;
+}
+
+.admin-login h1{
+  font-size:clamp(28px,5vw,36px)!important;
+  line-height:1.15;
+}
+.admin-login form{
+  width:min(380px,100%);
+  padding:36px 28px;
+}
+.admin-login .status-message{
+  margin:4px 0 12px;
+}
+
+.reservation-admin-panel{
+  background:#0f0d0d!important;
+}
+.admin-summary-card{
+  background:#151212!important;
+  box-shadow:none!important;
+}
+.compact-reservation-list{
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+}
+.compact-reservation-list article.admin-reservation-card{
+  background:#171313!important;
+  border:1px solid #332827;
+  color:#eee7e2;
+  box-shadow:none;
+}
+.admin-reservation-card.is-deleted{
+  opacity:.42;
+  filter:grayscale(.65);
+}
+.admin-reservation-card header p{
+  margin:5px 0 0;
+  color:#8f8580;
+  font-size:11px;
+}
+.admin-reservation-card dl{
+  gap:7px;
+}
+.admin-reservation-card dt{
+  color:#a99d96;
+}
+.admin-reservation-card dd{
+  color:#f1e8e2;
+}
+.admin-reservation-card dl div:nth-child(3) dd{
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.admin-card-actions{
+  display:flex;
+  gap:8px;
+  margin-top:16px;
+}
+.admin-mini-button{
+  min-height:36px;
+  padding:0 12px;
+  border:1px solid #423332;
+  border-radius:999px;
+  background:#111;
+  color:#e9ded7;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  font-size:11px;
+}
+.admin-mini-button:hover{
+  border-color:#91404a;
+  background:#191313;
+}
+.admin-mini-button.primary-mini{
+  border-color:#9b1a25;
+  background:#8f111b;
+  color:#fff;
+}
+.admin-mini-button.danger-mini{
+  color:#ffb9c0;
+}
+.admin-edit-form{
+  display:grid;
+  gap:12px;
+}
+.admin-edit-form label{
+  display:grid;
+  gap:7px;
+  color:#a99d96;
+  font-size:11px;
+}
+.admin-edit-form input,
+.admin-edit-form select{
+  width:100%;
+  min-height:42px;
+  border:1px solid #3c302f;
+  border-radius:10px;
+  background:#0a0909;
+  color:#fff;
+  padding:0 12px;
+}
+.admin-inline-message{
+  margin:0 0 16px;
+  padding:12px 14px;
+  border:1px solid #3b2d2c;
+  border-radius:12px;
+  background:#141111;
+  color:#f0d5d7;
+  font-size:12px;
+}
+
+@media(max-width:800px){
+  .message-section{
+    padding-left:16px;
+    padding-right:16px;
+  }
+  .message-grid{
+    width:100%;
+    max-width:100%;
+  }
+  .message-card{
+    width:100%;
+    padding:20px 18px;
+  }
+  .message-actions{
+    width:100%;
+  }
+  .message-actions .primary,
+  .message-actions .text-link-button{
+    max-width:100%;
+  }
+  .compact-reservation-list{
+    grid-template-columns:1fr;
+  }
+  .admin-card-actions{
+    flex-wrap:wrap;
+  }
+  .admin-mini-button{
+    flex:1;
+  }
+}

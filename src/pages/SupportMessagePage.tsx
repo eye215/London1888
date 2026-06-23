@@ -55,15 +55,15 @@ export default function SupportMessagePage() {
       </section>
 
       <section className="utility-card">
-        <form onSubmit={submit}>
+        <form onSubmit={submit} noValidate>
           <label className="field">
-            <span className="field-label">닉네임</span>
-            <input value={nickname} onChange={e => setNickname(e.target.value)} placeholder="표시할 이름을 입력해주세요" />
+            <span className="field-label">닉네임<i>*</i></span>
+            <input required aria-required="true" value={nickname} onChange={e => setNickname(e.target.value)} placeholder="표시될 이름을 입력해주세요" />
           </label>
 
           <div className="field">
-            <span className="field-label">응원할 배우</span>
-            <div className="actor-grid supporter-actor-grid">
+            <span className="field-label">응원할 배우<i>*</i></span>
+            <div className="actor-grid supporter-actor-grid" aria-label="응원할 배우 선택">
               <button type="button" onClick={() => setActorName(actorName === TEAM_ACTOR_NAME ? '' : TEAM_ACTOR_NAME)} className={actorName === TEAM_ACTOR_NAME ? 'actor selected all-actor' : 'actor all-actor'}>
                 <span>{actorName === TEAM_ACTOR_NAME && <Check size={14} />}</span>
                 <b>전체선택</b>
@@ -80,8 +80,8 @@ export default function SupportMessagePage() {
           </div>
 
           <label className="field">
-            <span className="field-label">응원 메시지</span>
-            <textarea rows={7} value={message} onChange={e => setMessage(e.target.value.slice(0, 300))} placeholder="배우에게 전하고 싶은 마음을 남겨주세요." />
+            <span className="field-label">응원 메시지<i>*</i></span>
+            <textarea required aria-required="true" rows={7} value={message} onChange={e => setMessage(e.target.value.slice(0, 300))} placeholder="배우에게 전하고 싶은 마음을 남겨주세요." />
             <div className="counter">{message.length} / 300</div>
           </label>
           {status && <p className="status-message">{status}</p>}
