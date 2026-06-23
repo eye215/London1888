@@ -39,7 +39,7 @@ export default function ReviewPage() {
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!access) return;
-    if (!actorName) return setStatus('후기를 전할 배우를 선택해주세요.');
+    if (!actorName) return setStatus('후기를 남길 배우를 선택해주세요.');
     if (!content.trim()) return setStatus('공연 후기를 입력해주세요.');
 
     setSubmitting(true);
@@ -54,7 +54,7 @@ export default function ReviewPage() {
 
     if (error) {
       console.error(error);
-      setStatus('후기를 저장하지 못했습니다. 예매 정보와 공연 시간을 확인해주세요.');
+      setStatus(`후기를 저장하지 못했습니다. ${error.message || '예매 정보와 공연 시간을 확인해주세요.'}`);
       return;
     }
 
@@ -73,13 +73,13 @@ export default function ReviewPage() {
       </header>
       <section className="utility-hero review-hero">
         <p>CURTAIN CALL</p>
-        <h1>공연의 여운을<br />배우에게 전해주세요.</h1>
+        <h1>공연의 순간을<br />배우에게 전해주세요</h1>
         <span>{access.scheduleLabel}</span>
       </section>
       <section className="utility-card review-card">
         <form onSubmit={submit}>
           <div className="field">
-            <span className="field-label">후기를 전할 배우</span>
+            <span className="field-label">후기를 남길 배우</span>
             <div className="actor-grid supporter-actor-grid">
               {actors.map(name => (
                 <button type="button" key={name} onClick={() => setActorName(name)} className={actorName === name ? 'actor selected' : 'actor'}>

@@ -14,22 +14,10 @@ export default function SupportMessagePage() {
     e.preventDefault();
     setStatus('');
 
-    if (!nickname.trim()) {
-      setStatus('닉네임을 입력해주세요.');
-      return;
-    }
-    if (!actorName) {
-      setStatus('응원할 배우를 선택해주세요.');
-      return;
-    }
-    if (!message.trim()) {
-      setStatus('응원 메시지를 입력해주세요.');
-      return;
-    }
-    if (!isDatabaseConfigured) {
-      setStatus('데이터베이스 연결을 확인해주세요.');
-      return;
-    }
+    if (!nickname.trim()) return setStatus('닉네임을 입력해주세요.');
+    if (!actorName) return setStatus('응원할 배우를 선택해주세요.');
+    if (!message.trim()) return setStatus('응원 메시지를 입력해주세요.');
+    if (!isDatabaseConfigured) return setStatus('데이터베이스 연결 정보를 확인해주세요.');
 
     setSubmitting(true);
     const { error } = await supabase.from('messages').insert({
@@ -49,7 +37,7 @@ export default function SupportMessagePage() {
       return;
     }
 
-    localStorage.setItem('toastMessage', '응원메세지가 등록되었습니다');
+    localStorage.setItem('toastMessage', '응원메세지가 등록되었습니다.');
     window.location.hash = '#/';
   };
 
@@ -62,26 +50,21 @@ export default function SupportMessagePage() {
 
       <section className="utility-hero">
         <p>ONLY HEART</p>
-        <h1>관람이 어려워도<br />마음은 남길 수 있어요.</h1>
+        <h1>관람이 어려워도<br />마음은 남길 수 있어요</h1>
       </section>
 
       <section className="utility-card">
         <form onSubmit={submit}>
           <label className="field">
             <span className="field-label">닉네임</span>
-            <input value={nickname} onChange={e => setNickname(e.target.value)} placeholder="표시될 이름을 입력해주세요" />
+            <input value={nickname} onChange={e => setNickname(e.target.value)} placeholder="표시할 이름을 입력해주세요" />
           </label>
 
           <div className="field">
             <span className="field-label">응원할 배우</span>
             <div className="actor-grid supporter-actor-grid">
               {allActors.map(name => (
-                <button
-                  type="button"
-                  key={name}
-                  onClick={() => setActorName(name)}
-                  className={actorName === name ? 'actor selected' : 'actor'}
-                >
+                <button type="button" key={name} onClick={() => setActorName(name)} className={actorName === name ? 'actor selected' : 'actor'}>
                   <span>{actorName === name && <Check size={14} />}</span>
                   <b>{name}</b>
                   <small>배우</small>

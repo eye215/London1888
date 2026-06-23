@@ -37,7 +37,7 @@ export default function ReviewCheckPage() {
       return;
     }
     if (!isDatabaseConfigured) {
-      setStatus('데이터베이스 연결을 확인해주세요.');
+      setStatus('데이터베이스 연결 정보를 확인해주세요.');
       return;
     }
 
@@ -86,8 +86,8 @@ export default function ReviewCheckPage() {
       </header>
       <section className="utility-hero">
         <p>AFTER THE CURTAIN</p>
-        <h1>당신이 목격한 밤을<br />들려주세요.</h1>
-        <span>공연을 관람한 예매자만 해당 회차 시작 이후 후기를 남길 수 있습니다.</span>
+        <h1>당신이 목격한 밤을<br />들려주세요</h1>
+        <span>공연 후 예매자 확인을 거쳐 배우에게만 공개되는 후기를 남길 수 있습니다.</span>
       </section>
       <section className="utility-card">
         <form onSubmit={submit} className="review-lookup-form">

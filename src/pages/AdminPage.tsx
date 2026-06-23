@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ArrowLeft, Download, Lock, MessageSquareText, Search } from 'lucide-react';
-import { cast, getScheduleLabel, schedules } from '../data/show';
+import { ArrowLeft, Download, Lock, MessageSquareText, RefreshCw } from 'lucide-react';
+import { cast, getCompactScheduleLabel, schedules } from '../data/show';
 import { isDatabaseConfigured, supabase } from '../lib/supabase';
 
 type Reservation = {
@@ -14,6 +14,7 @@ type Reservation = {
 };
 
 const ADMIN_PASSWORD = 'Dkdlen28!';
+const SEATS_PER_SHOW = 589;
 
 export default function AdminPage() {
   const [password, setPassword] = useState('');
@@ -21,42 +22,41 @@ export default function AdminPage() {
   const [items, setItems] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState(false);
   const [loadError, setLoadError] = useState('');
-  const [keyword, setKeyword] = useState('');
+  const [activeSchedule, setActiveSchedule] = useState('all');
 
   const loadReservations = () => {
-    if (!loggedIn || !isDatabaseConfigured) return;
+    if (!loggedIn) return;
+    if (!isDatabaseConfigured) {
+      setLoadError('Supabase 연결 정보가 없습니다. 배포 환경변수를 확인해주세요.');
+      return;
+    }
     setLoading(true);
     setLoadError('');
-    void supabase
-      .rpc('list_reservations_admin', { p_password: ADMIN_PASSWORD })
-      .then(({ data, error }) => {
-        if (error) {
-          console.error(error);
-          setLoadError('예매 데이터를 불러오지 못했습니다. Supabase 관리자 조회 함수를 확인해주세요.');
-        } else {
-          setItems((data || []) as Reservation[]);
-        }
-        setLoading(false);
-      });
+    void supabase.rpc('list_reservations_admin', { p_password: ADMIN_PASSWORD }).then(({ data, error }) => {
+      if (error) {
+        console.error(error);
+        setLoadError(`예매 데이터를 불러오지 못했습니다. ${error.message}`);
+      } else {
+        setItems((data || []) as Reservation[]);
+      }
+      setLoading(false);
+    });
   };
 
   useEffect(loadReservations, [loggedIn]);
 
-  const filtered = useMemo(() => {
-    const q = keyword.trim().toLowerCase();
-    if (!q) return items;
-    return items.filter(item => [item.name, item.phone, item.actor_name, getScheduleLabel(item.schedule)].join(' ').toLowerCase().includes(q));
-  }, [items, keyword]);
-
   const totalPeople = items.reduce((sum, item) => sum + item.num_people, 0);
+  const latest = items[0] ? new Date(items[0].created_at).toLocaleDateString('ko-KR') : '-';
   const scheduleStats = schedules.map(schedule => {
     const reservations = items.filter(item => item.schedule === schedule.value);
-    return {
-      schedule,
-      count: reservations.length,
-      people: reservations.reduce((sum, item) => sum + item.num_people, 0),
-    };
+    const people = reservations.reduce((sum, item) => sum + item.num_people, 0);
+    return { schedule, count: reservations.length, people, remain: SEATS_PER_SHOW - people };
   });
+
+  const filtered = useMemo(() => {
+    if (activeSchedule === 'all') return items;
+    return items.filter(item => item.schedule === activeSchedule);
+  }, [items, activeSchedule]);
 
   if (!loggedIn) {
     return (
@@ -75,8 +75,8 @@ export default function AdminPage() {
 
   const download = () => {
     const rows = [
-      ['예매번호', '이름', '전화번호', '인원', '스케줄', '배우', '예매일'],
-      ...items.map(x => [x.id.slice(0, 8), x.name, x.phone, String(x.num_people), getScheduleLabel(x.schedule), x.actor_name, new Date(x.created_at).toLocaleString('ko-KR')]),
+      ['이름', '전화번호', '인원', '스케줄', '배우', '예매일'],
+      ...items.map(x => [x.name, x.phone, String(x.num_people), getCompactScheduleLabel(x.schedule), x.actor_name, new Date(x.created_at).toLocaleString('ko-KR')]),
     ];
     const csv = '\uFEFF' + rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
     const a = document.createElement('a');
@@ -94,38 +94,48 @@ export default function AdminPage() {
           <h1>예매 관리</h1>
         </div>
         <div className="admin-head-actions">
-          <button className="admin-review-link" onClick={() => window.location.hash = '#/admin/reviews'}><MessageSquareText size={17} /> 공연 후기</button>
-          <button className="primary" onClick={download} disabled={!items.length}><Download /> CSV 다운로드</button>
+          <button className="admin-action-button" onClick={() => window.location.hash = '#/admin/reviews'}><MessageSquareText size={17} /> 공연후기</button>
+          <button className="admin-action-button" onClick={download} disabled={!items.length}><Download size={17} /> CSV</button>
+          <button className="admin-action-button" onClick={loadReservations} disabled={loading}><RefreshCw size={17} /> 새로고침</button>
         </div>
       </div>
 
-      <section className="admin-dashboard admin-dashboard-row">
-        <article><span>총 예매</span><strong>{items.length}</strong><small>건</small></article>
-        <article><span>총 관람 인원</span><strong>{totalPeople}</strong><small>명</small></article>
-        <article><span>최근 예매</span><strong>{items[0] ? new Date(items[0].created_at).toLocaleDateString('ko-KR') : '-'}</strong><small>updated</small></article>
+      <section className="admin-summary-card">
+        <div><span>총 예매</span><strong>{items.length}</strong><small>건</small></div>
+        <div><span>총 관람 인원</span><strong>{totalPeople}</strong><small>명</small></div>
+        <div><span>최근 예매</span><strong>{latest}</strong><small>updated</small></div>
       </section>
 
       <section className="admin-schedule-cards">
-        {scheduleStats.map(({ schedule, count, people }) => (
-          <article key={schedule.value}>
-            <div>
-              <span>{schedule.date}</span>
-              <strong>{schedule.time}</strong>
-              <small>CAST {schedule.cast}</small>
-            </div>
-            <p>{count}건 · {people}명</p>
-            <em>배역 · {cast[schedule.cast].main.join(' · ')}</em>
-          </article>
-        ))}
+        {scheduleStats.map(({ schedule, count, people, remain }) => {
+          const visibleNames = cast[schedule.cast].main.filter(name => !['유리', '흥섭', '준범'].includes(name));
+          return (
+            <article key={schedule.value}>
+              <header>
+                <strong>{schedule.date} {schedule.time}</strong>
+              </header>
+              <div className="seat-line"><span>{count}건 · {people}명</span><b>{remain.toLocaleString()}석 남음</b></div>
+              <em>{visibleNames.join(' · ')}</em>
+            </article>
+          );
+        })}
       </section>
 
       <section className="admin-list-panel">
         <div className="admin-tools">
           <div>
             <h2>Reservation List</h2>
-            <p>실시간 예매 데이터와 연결된 목록입니다. 이름, 전화번호, 배우명, 회차로 검색할 수 있습니다.</p>
+            <p>회차 탭을 선택하면 해당 날짜/시간의 예매만 확인할 수 있습니다.</p>
           </div>
-          <label className="admin-search"><Search size={16} /><input value={keyword} onChange={e => setKeyword(e.target.value)} placeholder="검색어 입력" /></label>
+        </div>
+
+        <div className="reservation-tabs">
+          <button className={activeSchedule === 'all' ? 'active' : ''} onClick={() => setActiveSchedule('all')}>전체</button>
+          {schedules.map(schedule => (
+            <button key={schedule.value} className={activeSchedule === schedule.value ? 'active' : ''} onClick={() => setActiveSchedule(schedule.value)}>
+              {schedule.date} · {schedule.time}
+            </button>
+          ))}
         </div>
 
         {loading && <div className="admin-empty">예매 내역을 불러오는 중입니다.</div>}
@@ -134,19 +144,23 @@ export default function AdminPage() {
           <div className="admin-empty">
             <span>NO RESERVATIONS YET</span>
             <h3>아직 표시할 예매 내역이 없습니다.</h3>
-            <p>예매가 들어오면 이곳에 카드 형태로 정리되어 표시됩니다.</p>
+            <p>예매가 들어오면 이 영역에 카드 형태로 정리됩니다.</p>
           </div>
         )}
 
-        <div className="admin-table">
+        <div className="admin-table compact-reservation-list">
           {filtered.map(x => (
             <article key={x.id}>
-              <span>#{x.id.slice(0, 8).toUpperCase()}</span>
-              <h2>{x.name} · {x.num_people}명</h2>
-              <p>{x.phone}</p>
-              <p>{getScheduleLabel(x.schedule)}</p>
-              <strong>{x.actor_name}</strong>
-              <time>{new Date(x.created_at).toLocaleString('ko-KR')}</time>
+              <header>
+                <h2>{x.name}</h2>
+                <strong>{x.num_people}명</strong>
+              </header>
+              <dl>
+                <div><dt>전화번호</dt><dd>{x.phone}</dd></div>
+                <div><dt>회차</dt><dd>{getCompactScheduleLabel(x.schedule)}</dd></div>
+                <div><dt>배우</dt><dd>{x.actor_name}</dd></div>
+                <div><dt>예매일</dt><dd>{new Date(x.created_at).toLocaleString('ko-KR')}</dd></div>
+              </dl>
             </article>
           ))}
         </div>

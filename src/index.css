@@ -240,3 +240,110 @@ body{background:#060505;color:#efe8e2}
   .admin-search input{width:100%}
   .admin-search select{width:100%}.private-review-card{padding:19px 16px}.private-review-card header,.private-review-card footer{align-items:flex-start;flex-direction:column;gap:7px}
 }
+
+/* 2026-06-23 style guide reset: tighter black/red system */
+.toast{
+  top:auto;
+  bottom:calc(92px + env(safe-area-inset-bottom));
+  width:min(520px,calc(100% - 28px));
+  border-radius:16px;
+  border-color:rgba(213,55,66,.75);
+  background:linear-gradient(135deg,rgba(25,12,14,.96),rgba(7,6,6,.96));
+  color:#fff;
+  text-align:center;
+  font-family:'SandollHeirofBold',serif;
+  box-shadow:0 20px 54px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.04);
+}
+.hero-date-only p,.hero-date-only p span,.hero-time-range{color:#fff!important}
+.compact-hero .poster-dagger{top:23%;width:78%;left:11%}
+.compact-hero .poster-title{top:12%;width:70%;left:15%}
+
+.section-heading h2,.intro h2{letter-spacing:-.02em}
+.program-section{background:linear-gradient(180deg,#0b0909,#120c0c 52%,#090707)}
+.cast-list{border-color:#2b2221;background:linear-gradient(145deg,rgba(18,14,14,.92),rgba(8,7,7,.96));box-shadow:0 28px 80px rgba(0,0,0,.28)}
+.cast-schedule-row{grid-template-columns:minmax(250px,320px) 1fr;min-height:180px}
+.cast-schedule-row:before{display:none}
+.cast-date-heading{color:#d43844;letter-spacing:.24em}
+.cast-schedule-chips{gap:10px}
+.cast-schedule-chip{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:42px;
+  padding:0 15px;
+  border:1px solid rgba(151,42,50,.55);
+  border-radius:999px;
+  background:linear-gradient(180deg,#171111,#0b0909);
+  color:#f6eee8;
+  font-size:13px;
+  letter-spacing:.035em;
+  box-shadow:inset 0 1px rgba(255,255,255,.06),0 12px 28px rgba(0,0,0,.22);
+}
+.cast-schedule-chip:after{content:"";width:5px;height:5px;margin-left:11px;border-radius:50%;background:#c22633;box-shadow:0 0 18px rgba(218,46,58,.9)}
+.cast-schedule-chip>span,.cast-schedule-chip>b{all:unset}
+.cast-members h3{font-size:clamp(15px,1.45vw,20px);line-height:1.75;letter-spacing:.025em;word-spacing:.04em;color:#eee6df}
+
+.admin-head-actions .primary,.admin-review-link,.admin-action-button{
+  min-height:46px;
+  padding:0 16px;
+  border:1px solid #573137;
+  border-radius:999px;
+  background:linear-gradient(180deg,#201213,#120c0c);
+  color:#f4ece7;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+.admin-head-actions .primary:hover,.admin-review-link:hover,.admin-action-button:hover{background:#8f111b;color:#fff}
+.admin-summary-card{
+  margin:22px 0;
+  padding:0;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  overflow:hidden;
+  border:1px solid #352827;
+  border-radius:22px;
+  background:linear-gradient(135deg,#151010,#0c0909);
+}
+.admin-summary-card>div{min-width:0;padding:24px 26px;border-right:1px solid #2e2423}
+.admin-summary-card>div:last-child{border-right:0}
+.admin-summary-card span{display:block;margin-bottom:9px;color:#8f8580;font-size:11px;letter-spacing:.08em}
+.admin-summary-card strong{font-size:clamp(22px,3vw,34px);color:#fff;line-height:1}
+.admin-summary-card small{margin-left:7px;color:#c73340;font-size:12px}
+.admin-schedule-cards article header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.admin-schedule-cards article header strong{font-size:15px;letter-spacing:.03em;white-space:nowrap}
+.seat-line{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin-bottom:12px}
+.seat-line span{color:#fff;font-size:17px}
+.seat-line b{color:#ffccd0;font-size:12px}
+.admin-schedule-cards em{min-height:34px}
+.reservation-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 20px}
+.reservation-tabs button{border:1px solid #3a2d2c;border-radius:999px;background:#0a0808;color:#9f948e;padding:10px 13px;font-size:12px}
+.reservation-tabs button.active{border-color:#bd2a36;background:#81101a;color:#fff}
+.compact-reservation-list article{border-top:0;padding:20px}
+.compact-reservation-list article header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+.compact-reservation-list article h2{margin:0;color:#fff;font-size:19px}
+.compact-reservation-list article header strong{padding:6px 10px;border-radius:999px;background:#2a0e12;color:#ffccd0;font-size:12px}
+.compact-reservation-list dl{display:grid;gap:10px;margin:0}
+.compact-reservation-list dl div{display:grid;grid-template-columns:68px 1fr;gap:10px;align-items:start}
+.compact-reservation-list dt{color:#7d736e;font-size:11px}
+.compact-reservation-list dd{margin:0;color:#ded5cf;font-size:12px;line-height:1.55}
+
+@media(max-width:800px){
+  .toast{bottom:calc(92px + env(safe-area-inset-bottom));top:auto}
+  .compact-hero .poster-dagger{top:26%;width:86%;left:7%}
+  .cast-schedule-row{grid-template-columns:1fr;padding:28px 0}
+  .cast-schedule-chips{display:flex;flex-wrap:wrap}
+  .cast-schedule-chip{width:auto;min-height:38px;padding:0 12px;font-size:12px}
+  .admin-head-actions{grid-template-columns:1fr 1fr 1fr}
+  .admin-action-button{padding:0 9px;font-size:11px}
+  .admin-summary-card{grid-template-columns:repeat(3,minmax(0,1fr));border-radius:16px}
+  .admin-summary-card>div{padding:15px 10px}
+  .admin-summary-card span{min-height:31px;font-size:9px;line-height:1.45}
+  .admin-summary-card strong{font-size:20px}
+  .admin-summary-card small{display:block;margin:4px 0 0}
+  .admin-schedule-cards article header strong{font-size:12px}
+  .seat-line{align-items:flex-start;flex-direction:column}
+  .compact-reservation-list dl div{grid-template-columns:58px 1fr}
+}

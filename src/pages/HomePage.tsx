@@ -97,7 +97,7 @@ export default function HomePage() {
         </div>
         <p className="body-copy">
           1888년 런던. 붉은 안개가 내려앉은 밤, 서로 다른 이유로 모인 사람들이 하나의 선택 앞에 선다.
-          빛과 그림자, 침묵과 고백이 교차하는 시간 속에서 당신의 밤은 어느 쪽으로 기울게 될까요.
+          빛과 그림자, 침묵과 고백이 교차하는 시간 속에서 당신은 밤이 어느 쪽으로 기울지 목격하게 된다.
         </p>
       </section>
 
@@ -115,17 +115,14 @@ export default function HomePage() {
 
         <div className="cast-list cast-schedule-list">
           {([
-            { type: 'A' as const, dates: ['07.25 SAT 1PM', '07.26 SUN 4PM'] },
-            { type: 'B' as const, dates: ['07.25 SAT 4PM', '07.26 SUN 1PM'] },
+            { type: 'A' as const, dates: ['07.25 SAT · 1PM', '07.26 SUN · 4PM'] },
+            { type: 'B' as const, dates: ['07.25 SAT · 4PM', '07.26 SUN · 1PM'] },
           ]).map(({ type, dates }) => (
             <div className="cast-row cast-schedule-row" key={type}>
               <div className="cast-session-block" aria-label={`CAST ${type} 공연 일정`}>
                 <span className="cast-date-heading">CAST {type}</span>
                 <div className="cast-schedule-chips">
-                  {dates.map(date => {
-                    const [datePart, dayPart, timePart] = date.split(' ');
-                    return <span className="cast-schedule-chip" key={date}><span>{datePart} {dayPart}</span><b>{timePart}</b></span>;
-                  })}
+                  {dates.map(date => <span className="cast-schedule-chip" key={date}>{date}</span>)}
                 </div>
               </div>
               <div className="cast-members">
@@ -140,7 +137,7 @@ export default function HomePage() {
         <div className="section-heading">
           <p className="section-no">03 · MESSAGES</p>
           <h2>응원의 마음</h2>
-          <p className="message-intro">예매자와 관객의 마음이 함께 쌓이는 공간입니다.</p>
+          <p className="message-intro">예매자와 관객의 마음을 함께 담아두는 공간입니다.</p>
         </div>
 
         <div className="message-actions">
@@ -169,11 +166,7 @@ export default function HomePage() {
                 </article>
               ))}
             </div>
-            {canViewMore && (
-              <button className="view-more-button" onClick={() => setVisibleMessageCount(count => count + 10)}>
-                View more +
-              </button>
-            )}
+            {canViewMore && <button className="view-more-button" onClick={() => setVisibleMessageCount(count => count + 10)}>View more +</button>}
           </>
         ) : (
           <div className="message-empty">
@@ -200,11 +193,7 @@ export default function HomePage() {
         <button className="primary" onClick={() => window.location.hash = '#/booking'}><Ticket size={18} /> 예매하기</button>
       </div>
 
-      <button
-        className={showTopButton ? 'quick-top-button visible' : 'quick-top-button'}
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        aria-label="최상단으로 이동"
-      >
+      <button className={showTopButton ? 'quick-top-button visible' : 'quick-top-button'} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="최상단으로 이동">
         <ArrowUp size={18} />
       </button>
     </main>

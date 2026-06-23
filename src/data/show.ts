@@ -32,3 +32,8 @@ export const getScheduleLabel = (value: string) => {
   const item = schedules.find(schedule => schedule.value === value);
   return item ? `${item.date} · ${item.time} · CAST ${item.cast}` : value;
 };
+
+export const getCompactScheduleLabel = (value: string) => {
+  const item = schedules.find(schedule => schedule.value === value);
+  return item ? `${item.date} ${item.time}` : value;
+};

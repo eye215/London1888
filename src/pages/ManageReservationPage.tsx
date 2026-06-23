@@ -37,7 +37,7 @@ export default function ManageReservationPage() {
       setName(lookup.name || '');
       setPhone(lookup.phone || '');
     } catch {
-      // 잘못된 임시 데이터는 무시합니다.
+      // 임시 조회 데이터는 무시합니다.
     }
   }, []);
 
@@ -51,15 +51,12 @@ export default function ManageReservationPage() {
       return;
     }
     if (!isDatabaseConfigured) {
-      setStatus('데이터베이스 연결을 확인해주세요.');
+      setStatus('데이터베이스 연결 정보를 확인해주세요.');
       return;
     }
 
     setWorking(true);
-    const { data, error } = await supabase.rpc('find_reservation_by_contact', {
-      p_name: name.trim(),
-      p_phone: phone,
-    });
+    const { data, error } = await supabase.rpc('find_reservation_by_contact', { p_name: name.trim(), p_phone: phone });
     setWorking(false);
 
     if (error) {
@@ -101,17 +98,8 @@ export default function ManageReservationPage() {
       return;
     }
 
-    syncGoogleSheet({
-      action: 'update',
-      id: reservation.id,
-      name: name.trim(),
-      phone,
-      numPeople: Number(numPeople),
-      schedule,
-      actorName: reservation.actor_name,
-    });
-
-    localStorage.setItem('toastMessage', '예매 정보가 수정되었습니다');
+    syncGoogleSheet({ action: 'update', id: reservation.id, name: name.trim(), phone, numPeople: Number(numPeople), schedule, actorName: reservation.actor_name });
+    localStorage.setItem('toastMessage', '예매 정보가 수정되었습니다.');
     window.location.hash = '#/';
   };
 
@@ -120,10 +108,7 @@ export default function ManageReservationPage() {
     if (!window.confirm('예매를 취소할까요? 취소한 예매 내역은 복구할 수 없습니다.')) return;
 
     setWorking(true);
-    const { data, error } = await supabase.rpc('cancel_reservation_by_contact', {
-      p_name: name.trim(),
-      p_phone: phone,
-    });
+    const { data, error } = await supabase.rpc('cancel_reservation_by_contact', { p_name: name.trim(), p_phone: phone });
     setWorking(false);
 
     if (error || !Array.isArray(data) || data.length === 0) {
@@ -132,16 +117,8 @@ export default function ManageReservationPage() {
       return;
     }
 
-    syncGoogleSheet({
-      action: 'delete',
-      id: reservation.id,
-      name: name.trim(),
-      phone,
-      schedule: reservation.schedule,
-      actorName: reservation.actor_name,
-    });
-
-    localStorage.setItem('toastMessage', '예매내역이 삭제되었습니다');
+    syncGoogleSheet({ action: 'delete', id: reservation.id, name: name.trim(), phone, schedule: reservation.schedule, actorName: reservation.actor_name });
+    localStorage.setItem('toastMessage', '예매내역이 삭제되었습니다.');
     window.location.hash = '#/';
   };
 
@@ -160,12 +137,8 @@ export default function ManageReservationPage() {
 
       <section className="utility-card">
         <form onSubmit={findReservation} className="lookup-form">
-          <Field label="예매자 실명">
-            <input value={name} onChange={e => setName(e.target.value)} placeholder="실명을 입력해주세요" />
-          </Field>
-          <Field label="전화번호">
-            <input inputMode="numeric" value={phone} onChange={e => setPhone(formatPhone(e.target.value))} placeholder="010-0000-0000" />
-          </Field>
+          <Field label="예매자 실명"><input value={name} onChange={e => setName(e.target.value)} placeholder="실명을 입력해주세요" /></Field>
+          <Field label="전화번호"><input inputMode="numeric" value={phone} onChange={e => setPhone(formatPhone(e.target.value))} placeholder="010-0000-0000" /></Field>
           <button className="submit-button" disabled={working}><Search size={18} /> 예매확인</button>
         </form>
 
@@ -180,9 +153,7 @@ export default function ManageReservationPage() {
             </div>
 
             <div className="field-row">
-              <Field label="예매 인원">
-                <input type="number" min="1" value={numPeople} onChange={e => setNumPeople(e.target.value)} />
-              </Field>
+              <Field label="예매 인원"><input type="number" min="1" value={numPeople} onChange={e => setNumPeople(e.target.value)} /></Field>
               <Field label="관람 일정">
                 <select value={schedule} onChange={e => setSchedule(e.target.value)}>
                   {schedules.map(item => <option key={item.value} value={item.value}>{getScheduleLabel(item.value)}</option>)}

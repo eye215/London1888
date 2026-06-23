@@ -36,6 +36,8 @@ const maskName = (value: string) => {
 const getLast4 = (phone: string) => phone.replace(/\D/g, '').slice(-4);
 const asset = (path: string) => `${import.meta.env.BASE_URL}${path}`.replace(/\/+/g, '/');
 
+const errorOrder: (keyof FormData)[] = ['name', 'numPeople', 'phone', 'phoneConfirm', 'schedule', 'actors'];
+
 export default function BookingPage() {
   const [form, setForm] = useState<FormData>({
     name: '',
@@ -73,6 +75,14 @@ export default function BookingPage() {
     update('actors', form.actors.includes(name) ? form.actors.filter(a => a !== name) : [...form.actors, name]);
   };
 
+  const scrollToFirstError = (next: Record<string, string>) => {
+    const first = errorOrder.find(key => next[key]);
+    if (!first) return;
+    window.setTimeout(() => {
+      document.querySelector(`[data-field="${first}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 30);
+  };
+
   const validate = () => {
     const next: Record<string, string> = {};
     if (!form.name.trim()) next.name = '예매자 실명을 입력해주세요.';
@@ -81,8 +91,9 @@ export default function BookingPage() {
     if (!form.phoneConfirm) next.phoneConfirm = '전화번호를 한 번 더 입력해주세요.';
     else if (form.phone !== form.phoneConfirm) next.phoneConfirm = '전화번호가 일치하지 않습니다.';
     if (!form.schedule) next.schedule = '공연 일정을 선택해주세요.';
-    if (!form.actors.length) next.actors = '응원할 배우를 한 명 이상 선택해주세요.';
+    if (!form.actors.length) next.actors = '응원할 배우를 1명 이상 선택해주세요.';
     setErrors(next);
+    scrollToFirstError(next);
     return Object.keys(next).length === 0;
   };
 
@@ -151,7 +162,7 @@ export default function BookingPage() {
 
       localStorage.setItem('reservationInfo', JSON.stringify({ bookingNumber, name: form.name, actor: actorNames, schedule: form.schedule }));
       localStorage.setItem('toastMessage', '예매가 완료되었습니다.');
-      window.location.href = '/#/';
+      window.location.href = '/London1888/#/';
     } catch (error) {
       console.error(error);
       alert('예매 저장 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
@@ -210,33 +221,28 @@ export default function BookingPage() {
           <form onSubmit={submit} noValidate>
             <FormSection number="01" title="예매자 정보" description="예매 확인 및 변경에 사용할 정보를 입력해주세요.">
               <div className="field-row">
-                <Field label="예매자 실명" error={errors.name}>
+                <Field id="name" label="예매자 실명" error={errors.name}>
                   <input aria-label="예매자 실명" value={form.name} onChange={e => update('name', e.target.value)} placeholder="실명을 입력해주세요" />
                 </Field>
-                <Field label="인원수" error={errors.numPeople}>
+                <Field id="numPeople" label="인원수" error={errors.numPeople}>
                   <input aria-label="인원수" type="number" min="1" value={form.numPeople} onChange={e => update('numPeople', e.target.value)} placeholder="1" />
                 </Field>
               </div>
               <div className="field-row">
-                <Field label="전화번호" error={errors.phone}>
+                <Field id="phone" label="전화번호" error={errors.phone}>
                   <input aria-label="전화번호" inputMode="numeric" value={form.phone} onChange={e => update('phone', formatPhone(e.target.value))} placeholder="010-0000-0000" />
                 </Field>
-                <Field label="전화번호 확인" error={errors.phoneConfirm}>
+                <Field id="phoneConfirm" label="전화번호 확인" error={errors.phoneConfirm}>
                   <input aria-label="전화번호 확인" inputMode="numeric" value={form.phoneConfirm} onChange={e => update('phoneConfirm', formatPhone(e.target.value))} placeholder="한 번 더 입력해주세요" />
                 </Field>
               </div>
             </FormSection>
 
             <FormSection number="02" title="공연 선택" description="관람할 날짜와 시간을 선택해주세요.">
-              <Field label="스케줄" error={errors.schedule}>
+              <Field id="schedule" label="스케줄" error={errors.schedule}>
                 <div className="option-grid schedule-options">
                   {schedules.map(s => (
-                    <button
-                      type="button"
-                      key={s.value}
-                      className={form.schedule === s.value ? 'option selected' : 'option'}
-                      onClick={() => { update('schedule', s.value); update('actors', []); }}
-                    >
+                    <button type="button" key={s.value} className={form.schedule === s.value ? 'option selected' : 'option'} onClick={() => { update('schedule', s.value); update('actors', []); }}>
                       <span>{s.date}</span>
                       <strong>{s.time}</strong>
                       <small>CAST {s.cast}</small>
@@ -246,20 +252,14 @@ export default function BookingPage() {
               </Field>
             </FormSection>
 
-            <FormSection number="03" title="배우 선택" description="여러 명을 선택할 수 있어요.">
-              <Field label="응원할 배우" error={errors.actors}>
+            <FormSection number="03" title="배우 선택" description="응원할 배우를 여러 명 선택할 수 있습니다.">
+              <Field id="actors" label="응원할 배우" error={errors.actors}>
                 <p className="field-help">
                   {selectedSchedule ? `CAST ${selectedSchedule.cast} · 배역 6명 / 앙상블 5명` : '공연 스케줄을 먼저 선택해주세요.'}
                 </p>
                 <div className="actor-grid">
                   {actorChoices.map(({ name, role }) => (
-                    <button
-                      type="button"
-                      disabled={!selectedSchedule}
-                      key={`${name}-${role}`}
-                      onClick={() => toggleActor(name)}
-                      className={form.actors.includes(name) ? 'actor selected' : 'actor'}
-                    >
+                    <button type="button" disabled={!selectedSchedule} key={`${name}-${role}`} onClick={() => toggleActor(name)} className={form.actors.includes(name) ? 'actor selected' : 'actor'}>
                       <span>{form.actors.includes(name) && <Check size={14} />}</span>
                       <b>{name}</b>
                       <small>{role}</small>
@@ -269,15 +269,9 @@ export default function BookingPage() {
               </Field>
             </FormSection>
 
-            <FormSection number="04" title="응원 메시지" description="홈 화면의 응원의 마음 영역에 함께 노출됩니다.">
-              <Field label="메시지" required={false}>
-                <textarea
-                  aria-label="응원 메시지"
-                  value={form.message}
-                  onChange={e => update('message', e.target.value.slice(0, 300))}
-                  rows={5}
-                  placeholder="배우에게 전하고 싶은 마음을 남겨주세요."
-                />
+            <FormSection number="04" title="응원 메시지" description="메인 화면의 응원의 마음 영역에 함께 노출됩니다.">
+              <Field id="message" label="메시지" required={false}>
+                <textarea aria-label="응원 메시지" value={form.message} onChange={e => update('message', e.target.value.slice(0, 300))} rows={5} placeholder="배우에게 전하고 싶은 마음을 남겨주세요." />
                 <div className="counter">{form.message.length} / 300</div>
               </Field>
             </FormSection>
@@ -292,8 +286,8 @@ export default function BookingPage() {
   );
 }
 
-function Field({ label, error, children, required = true }: { label: string; error?: string; children: React.ReactNode; required?: boolean }) {
-  return <div className="field"><span className="field-label">{label}{required && <i>*</i>}</span>{children}{error && <em className="error">{error}</em>}</div>;
+function Field({ id, label, error, children, required = true }: { id: string; label: string; error?: string; children: React.ReactNode; required?: boolean }) {
+  return <div className="field" data-field={id}><span className="field-label">{label}{required && <i>*</i>}</span>{children}{error && <em className="error">{error}</em>}</div>;
 }
 
 function FormSection({ number, title, description, children }: { number: string; title: string; description: string; children: React.ReactNode }) {

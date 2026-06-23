@@ -25,11 +25,14 @@ export default function AdminReviewsPage() {
   useEffect(() => {
     if (!loggedIn) return;
     setLoading(true);
+    setError('');
     void supabase.rpc('list_reviews_admin', { p_password: ADMIN_PASSWORD }).then(({ data, error: loadError }) => {
       if (loadError) {
         console.error(loadError);
-        setError('후기 데이터를 불러오지 못했습니다. 후기용 Supabase SQL을 확인해주세요.');
-      } else setReviews((data || []) as PrivateReview[]);
+        setError(`후기 데이터를 불러오지 못했습니다. ${loadError.message}`);
+      } else {
+        setReviews((data || []) as PrivateReview[]);
+      }
       setLoading(false);
     });
   }, [loggedIn]);
