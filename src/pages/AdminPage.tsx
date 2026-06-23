@@ -71,6 +71,11 @@ export default function AdminPage() {
     const list = activeSchedule === 'all' ? items : items.filter(item => item.schedule === activeSchedule);
     return [...list].sort((a, b) => Number(Boolean(a.admin_deleted_at)) - Number(Boolean(b.admin_deleted_at)));
   }, [items, activeSchedule]);
+  const selectedFilterLabel = activeSchedule === 'all' ? '전체 예매내역' : getCompactScheduleLabel(activeSchedule);
+  const selectedActiveCount = activeSchedule === 'all'
+    ? activeItems.length
+    : activeItems.filter(item => item.schedule === activeSchedule).length;
+  const selectedCanceledCount = filtered.filter(item => item.admin_deleted_at).length;
 
   const login = (event: React.FormEvent) => {
     event.preventDefault();
@@ -206,24 +211,32 @@ export default function AdminPage() {
 
         <div className="admin-tools">
           <div>
-            <h2>Reservation List</h2>
-            <p>회차별 예매 현황과 예약 내역을 관리합니다.</p>
+            <h2>회차별 예매 현황</h2>
+            <p>카드를 선택하면 아래 Reservation List가 해당 회차로 필터링됩니다.</p>
           </div>
         </div>
 
         <div className="admin-schedule-cards admin-schedule-tabs in-panel" aria-label="회차별 예매내역 필터">
-          <button type="button" className={activeSchedule === 'all' ? 'active' : ''} onClick={() => setActiveSchedule('all')}>
-            <header><strong>전체 예매</strong></header>
-            <div className="seat-line"><span>{activeItems.length}건 · {totalPeople}명</span><b>전체 보기</b></div>
+          <button type="button" className={activeSchedule === 'all' ? 'active' : ''} aria-pressed={activeSchedule === 'all'} onClick={() => setActiveSchedule('all')}>
+            <header><span>ALL</span><strong>전체 예매</strong></header>
+            <div className="seat-line"><span>{activeItems.length}건 · {totalPeople}명</span><b>{activeSchedule === 'all' ? '선택됨' : '전체 보기'}</b></div>
           </button>
           {scheduleStats.map(({ schedule, count, people, remain }) => {
             return (
-              <button type="button" key={schedule.value} className={activeSchedule === schedule.value ? 'active' : ''} onClick={() => setActiveSchedule(schedule.value)}>
-                <header><strong>{schedule.date} {schedule.time}</strong></header>
-                <div className="seat-line"><span>{count}건 · {people}명</span><b>{remain.toLocaleString()}석 남음</b></div>
+              <button type="button" key={schedule.value} className={activeSchedule === schedule.value ? 'active' : ''} aria-pressed={activeSchedule === schedule.value} onClick={() => setActiveSchedule(schedule.value)}>
+                <header><span>FILTER</span><strong>{schedule.date} {schedule.time}</strong></header>
+                <div className="seat-line"><span>{count}건 · {people}명</span><b>{activeSchedule === schedule.value ? '선택됨' : `${remain.toLocaleString()}석 남음`}</b></div>
               </button>
             );
           })}
+        </div>
+
+        <div className="reservation-list-context">
+          <div>
+            <span>Reservation List</span>
+            <h2>{selectedFilterLabel}</h2>
+          </div>
+          <p>정상 {selectedActiveCount}건{selectedCanceledCount > 0 ? ` · 취소 ${selectedCanceledCount}건` : ''}</p>
         </div>
 
         {actionMessage && <div className="admin-inline-message">{actionMessage}</div>}

@@ -2506,20 +2506,23 @@ body{
 
 /* Admin schedule cards double as reservation list tabs */
 .admin-schedule-tabs{
-  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  grid-template-columns:1.08fr repeat(4,minmax(0,1fr))!important;
   align-items:stretch;
+  gap:10px!important;
+  margin-bottom:14px!important;
 }
 
 .admin-schedule-tabs button{
   width:100%;
-  min-height:96px;
-  padding:18px 16px;
+  min-height:104px;
+  padding:16px 15px;
   border:1px solid #332827;
   border-radius:14px;
-  background:#121010;
+  background:#0d0b0b;
   color:inherit;
   text-align:left;
-  transition:border-color .18s ease, background .18s ease, transform .18s ease;
+  box-shadow:inset 0 1px rgba(255,255,255,.025);
+  transition:border-color .18s ease, background .18s ease, transform .18s ease, box-shadow .18s ease;
 }
 
 .admin-schedule-tabs button:hover{
@@ -2529,8 +2532,9 @@ body{
 }
 
 .admin-schedule-tabs button.active{
-  border-color:#c43440;
-  background:#210d11;
+  border-color:#c43440!important;
+  background:#210d11!important;
+  box-shadow:inset 0 0 0 1px rgba(196,52,64,.28),0 10px 26px rgba(0,0,0,.22);
 }
 
 .admin-schedule-tabs button.active header strong{
@@ -2542,10 +2546,15 @@ body{
 }
 
 .admin-schedule-tabs button header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:13px;
+  display:grid;
+  gap:7px;
+  margin-bottom:14px;
+}
+
+.admin-schedule-tabs button header span{
+  color:#8d7f78;
+  font-size:9px;
+  letter-spacing:.2em;
 }
 
 .admin-schedule-tabs button header strong{
@@ -2556,6 +2565,49 @@ body{
 
 .admin-schedule-tabs .seat-line{
   margin:0;
+  align-items:flex-start;
+  flex-direction:column;
+  gap:6px;
+}
+
+.admin-schedule-tabs .seat-line span{
+  font-size:16px;
+}
+
+.admin-schedule-tabs .seat-line b{
+  font-size:11px;
+  letter-spacing:.02em;
+}
+
+.reservation-list-context{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:16px;
+  margin:18px 0 16px;
+  padding:18px 0 0;
+  border-top:1px solid #2f2524;
+}
+
+.reservation-list-context span{
+  display:block;
+  margin-bottom:6px;
+  color:#bc2430;
+  font-size:9px;
+  letter-spacing:.24em;
+}
+
+.reservation-list-context h2{
+  margin:0;
+  color:#f3e9e4;
+  font-size:22px;
+}
+
+.reservation-list-context p{
+  margin:0 0 3px;
+  color:#8c817b;
+  font-size:12px;
+  white-space:nowrap;
 }
 
 @media(max-width:980px){
@@ -2571,6 +2623,12 @@ body{
 
   .admin-schedule-tabs button{
     min-height:78px;
+  }
+
+  .reservation-list-context{
+    align-items:flex-start;
+    flex-direction:column;
+    gap:8px;
   }
 }
 
