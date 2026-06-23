@@ -21,7 +21,7 @@
 .hero-actions p{margin:0;color:#d6cdc6;font:600 clamp(11px,1.2vw,14px) 'Cormorant Garamond',serif;letter-spacing:.18em;text-shadow:0 3px 8px #000}
 .hero-actions p span{color:#a5141f;margin:0 .25em}
 .hero-actions .hero-button{margin:0;box-shadow:0 10px 35px rgba(120,0,12,.35)}
-@keyframes dagger-drop{0%{transform:translateY(-130vh) rotate(-3deg)}72%{transform:translateY(2.2%) rotate(.5deg)}86%{transform:translateY(-1.2%) rotate(-.2deg)}100%{transform:translateY(0) rotate(0)}}
+@keyframes dagger-drop{0%{transform:translateY(-118%) rotate(-3deg)}72%{transform:translateY(2.2%) rotate(.5deg)}86%{transform:translateY(-1.2%) rotate(-.2deg)}100%{transform:translateY(0) rotate(0)}}
 @keyframes title-reveal{0%{opacity:0;transform:scale(.94);filter:blur(8px) drop-shadow(0 8px 8px rgba(0,0,0,.8))}100%{opacity:1;transform:scale(1);filter:blur(0) drop-shadow(0 8px 8px rgba(0,0,0,.8))}}
 @media(prefers-reduced-motion:reduce){.poster-dagger,.poster-title{animation-duration:.01ms;animation-delay:0s}}
 @media(max-width:800px){.poster-hero{min-height:640px}.poster-stage{width:100vw;min-height:640px}.poster-background{object-fit:cover}.poster-title{width:84%;left:8%;top:14%}.poster-dagger{width:90%;left:5%;top:20%}.hero-actions{bottom:12%;width:90%}.poster-hero .scroll-cue{display:none}}
@@ -254,6 +254,60 @@ body{background:#060505;color:#efe8e2}
   .reservation-admin-panel .in-panel-summary{margin-bottom:18px}
 }
 
+/* 2026-06-23 visual QA pass */
+.compact-hero .poster-stage{width:min(100vw,66svh)}
+.compact-hero .poster-title{top:15%;width:68%;left:16%}
+.compact-hero .poster-dagger{top:30%;width:78%;left:11%}
+.message-card>div{
+  min-width:0;
+}
+.message-card>div span{
+  display:block;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.message-card>p{
+  display:-webkit-box;
+  -webkit-line-clamp:4;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.compact-reservation-list dd{
+  overflow-wrap:anywhere;
+}
+.compact-reservation-list dl div:nth-child(3) dd{
+  display:-webkit-box;
+  -webkit-line-clamp:3;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.admin-schedule-cards article{
+  min-height:150px;
+}
+.admin-schedule-cards em{
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.site-footer{
+  padding-bottom:132px;
+}
+
+@media(max-width:800px){
+  .compact-hero .poster-stage{width:100vw}
+  .compact-hero .poster-title{top:13.5%;width:84%;left:8%}
+  .compact-hero .poster-dagger{top:30%;width:88%;left:6%}
+  .section{padding-top:88px;padding-bottom:88px}
+  .message-card{padding:22px 20px}
+  .message-card>p{-webkit-line-clamp:3}
+  .admin-schedule-cards article{min-height:152px}
+  .compact-reservation-list article{padding:18px}
+  .mobile-book{padding-bottom:calc(14px + env(safe-area-inset-bottom))}
+}
+
 /* 2026-06-23 interaction polish */
 .compact-hero .poster-dagger{top:29%;width:78%;left:11%}
 .all-actor{border-style:solid;background:linear-gradient(135deg,#251013,#0b0909)!important}
@@ -401,4 +455,186 @@ body{background:#060505;color:#efe8e2}
   .admin-schedule-cards article header strong{font-size:12px}
   .seat-line{align-items:flex-start;flex-direction:column}
   .compact-reservation-list dl div{grid-template-columns:58px 1fr}
+}
+
+/* 2026-06-23 final UI QA: calmer poster, cleaner cast/date cards, denser admin */
+.compact-hero .poster-title{
+  top:12.5%;
+  width:68%;
+  left:16%;
+}
+.compact-hero .poster-dagger{
+  top:25%;
+  width:80%;
+  left:10%;
+}
+.hero-date-only{
+  text-shadow:0 2px 16px rgba(0,0,0,.86),0 0 22px rgba(120,0,8,.5);
+}
+.hero-date-only p{
+  color:#fff!important;
+  letter-spacing:.055em;
+}
+.hero-time-range{
+  color:#fff!important;
+}
+
+.cast-schedule-row{
+  gap:clamp(22px,4vw,54px);
+  padding:34px clamp(18px,3vw,36px);
+  border-top:1px solid rgba(98,76,72,.44);
+}
+.cast-schedule-chips{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  width:min(100%,520px);
+}
+.cast-schedule-chip{
+  min-height:0;
+  width:100%;
+  justify-content:flex-start;
+  padding:13px 14px 12px;
+  border:1px solid rgba(120,75,75,.56);
+  border-left:3px solid #b72a35;
+  border-radius:14px;
+  background:
+    linear-gradient(135deg,rgba(87,20,25,.34),rgba(10,8,8,.98) 58%),
+    radial-gradient(circle at 12% 18%,rgba(255,255,255,.08),transparent 28%);
+  color:#fff;
+  font-size:13px;
+  letter-spacing:.035em;
+  box-shadow:inset 0 1px rgba(255,255,255,.065),0 16px 34px rgba(0,0,0,.22);
+}
+.cast-schedule-chip:after{
+  display:none;
+}
+.cast-members h3{
+  max-width:900px;
+  font-size:clamp(14px,1.24vw,18px);
+}
+
+.mobile-book{
+  box-shadow:0 -18px 54px rgba(0,0,0,.58);
+}
+.mobile-book>button:first-child,
+.mobile-book .review-entry-button,
+.mobile-book .primary{
+  box-shadow:inset 0 1px rgba(255,255,255,.08),0 12px 26px rgba(0,0,0,.34);
+}
+.mobile-book .review-entry-button{
+  border-color:rgba(124,60,66,.8);
+  background:linear-gradient(180deg,#1d1415,#0f0b0b);
+}
+
+.reservation-admin-panel{
+  background:
+    radial-gradient(circle at 0 0,rgba(145,25,34,.14),transparent 34%),
+    linear-gradient(145deg,#141111,#0b0909);
+}
+.admin-summary-card{
+  box-shadow:inset 0 1px rgba(255,255,255,.04),0 18px 48px rgba(0,0,0,.2);
+}
+.admin-summary-card>div{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+.admin-summary-card .latest-summary strong{
+  font-size:clamp(18px,2.4vw,28px);
+}
+.admin-schedule-cards{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+}
+.admin-schedule-cards article{
+  min-height:142px;
+  border-radius:18px;
+}
+.admin-schedule-cards article header strong{
+  font-size:14px;
+}
+.compact-reservation-list{
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+}
+.compact-reservation-list article{
+  border:1px solid rgba(67,51,49,.76);
+  border-radius:18px;
+  background:linear-gradient(145deg,#fff,#f4f0ea);
+}
+.compact-reservation-list dl{
+  gap:8px;
+}
+.compact-reservation-list dd{
+  color:#3c3632;
+}
+.compact-reservation-list dt{
+  color:#8a2b33;
+}
+
+@media(max-width:800px){
+  .compact-hero .poster-title{
+    top:12.5%;
+    width:84%;
+    left:8%;
+  }
+  .compact-hero .poster-dagger{
+    top:30%;
+    width:90%;
+    left:5%;
+  }
+  .hero-date-only p{
+    font-size:clamp(16px,5vw,19px);
+  }
+  .cast-schedule-row{
+    padding:26px 0;
+  }
+  .cast-schedule-chips{
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+  .cast-schedule-chip{
+    padding:11px 10px 10px;
+    border-radius:12px;
+    font-size:11px;
+    letter-spacing:.01em;
+  }
+  .cast-members h3{
+    font-size:13px;
+    line-height:1.9;
+  }
+  .admin-summary-card>div{
+    padding:14px 8px;
+  }
+  .admin-summary-card span{
+    min-height:auto;
+    margin-bottom:8px;
+    font-size:9px;
+  }
+  .admin-summary-card strong{
+    font-size:21px;
+  }
+  .admin-summary-card .latest-summary strong{
+    font-size:13px;
+    letter-spacing:-.04em;
+  }
+  .admin-summary-card small{
+    font-size:10px;
+  }
+  .admin-schedule-cards{
+    grid-template-columns:1fr 1fr;
+  }
+  .admin-schedule-cards article{
+    min-height:136px;
+    padding:16px 14px;
+  }
+  .admin-schedule-cards article header strong{
+    font-size:11px;
+  }
+  .reservation-tabs button{
+    padding:9px 10px;
+    font-size:11px;
+  }
+  .compact-reservation-list{
+    grid-template-columns:1fr;
+  }
 }
