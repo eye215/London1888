@@ -2469,6 +2469,41 @@ body{
   }
 }
 
+/* Footer-link style CTAs */
+.text-link-button,
+.message-actions .text-link-button{
+  width:auto!important;
+  min-height:0!important;
+  border:0!important;
+  border-bottom:1px solid currentColor!important;
+  border-radius:0!important;
+  background:transparent!important;
+  color:#8c827c!important;
+  padding:0 0 5px!important;
+  box-shadow:none!important;
+  font-size:10px!important;
+  line-height:1.4!important;
+  letter-spacing:.14em!important;
+  text-decoration:none!important;
+}
+
+.text-link-button:hover,
+.message-actions .text-link-button:hover{
+  color:#f0e8e2!important;
+  background:transparent!important;
+}
+
+@media(max-width:800px){
+  .message-actions{
+    gap:14px!important;
+  }
+
+  .message-actions .text-link-button{
+    width:auto!important;
+    font-size:10px!important;
+  }
+}
+
 /* Make section props intentionally visible, not just texture */
 .content-floating-prop{
   opacity:1!important;
