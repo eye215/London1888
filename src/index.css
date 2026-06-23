@@ -2447,3 +2447,81 @@ body{
     transform:rotate(var(--section-prop-rotate));
   }
 }
+
+/* Make section props intentionally visible, not just texture */
+.content-floating-prop{
+  opacity:.36!important;
+  filter:brightness(1.08) contrast(1.22) saturate(.9) drop-shadow(0 22px 26px rgba(0,0,0,.72)) drop-shadow(0 0 24px rgba(150,18,30,.18))!important;
+}
+
+.content-prop-sickle{
+  width:min(980px,96vw)!important;
+  right:-30%!important;
+  top:-28%!important;
+  opacity:.34!important;
+}
+
+.content-prop-camera{
+  width:min(560px,62vw)!important;
+  right:-15%!important;
+  top:-86%!important;
+  opacity:.38!important;
+}
+
+.content-prop-dagger{
+  width:min(1120px,112vw)!important;
+  left:-42%!important;
+  top:2%!important;
+  opacity:.32!important;
+}
+
+.content-prop-typewriter{
+  width:min(760px,90vw)!important;
+  right:-24%!important;
+  bottom:-38%!important;
+  opacity:.36!important;
+}
+
+.content-prop-revolver{
+  width:min(520px,68vw)!important;
+  right:-18%!important;
+  bottom:-54%!important;
+  opacity:.4!important;
+}
+
+@media(max-width:800px){
+  .content-floating-prop{
+    opacity:.42!important;
+    filter:brightness(1.14) contrast(1.24) saturate(.92) drop-shadow(0 18px 22px rgba(0,0,0,.78)) drop-shadow(0 0 22px rgba(150,18,30,.2))!important;
+  }
+
+  .content-prop-sickle{
+    width:154vw!important;
+    right:-70vw!important;
+    top:-6%!important;
+  }
+
+  .content-prop-camera{
+    width:92vw!important;
+    right:-42vw!important;
+    top:-35%!important;
+  }
+
+  .content-prop-dagger{
+    width:182vw!important;
+    left:-104vw!important;
+    top:2%!important;
+  }
+
+  .content-prop-typewriter{
+    width:132vw!important;
+    right:-62vw!important;
+    bottom:-28%!important;
+  }
+
+  .content-prop-revolver{
+    width:96vw!important;
+    right:-46vw!important;
+    bottom:-50%!important;
+  }
+}
