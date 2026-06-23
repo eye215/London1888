@@ -2471,9 +2471,14 @@ body{
 
 /* Footer-link style CTAs */
 .text-link-button,
-.message-actions .text-link-button{
+.message-actions .text-link-button,
+.view-more-button,
+.message-section .view-more-button{
   width:auto!important;
   min-height:0!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
   border:0!important;
   border-bottom:1px solid currentColor!important;
   border-radius:0!important;
@@ -2481,6 +2486,7 @@ body{
   color:#8c827c!important;
   padding:0 0 5px!important;
   box-shadow:none!important;
+  font-family:'SandollHeirofLight',serif!important;
   font-size:10px!important;
   line-height:1.4!important;
   letter-spacing:.14em!important;
@@ -2488,9 +2494,16 @@ body{
 }
 
 .text-link-button:hover,
-.message-actions .text-link-button:hover{
+.message-actions .text-link-button:hover,
+.view-more-button:hover,
+.message-section .view-more-button:hover{
   color:#f0e8e2!important;
   background:transparent!important;
+}
+
+.view-more-button,
+.message-section .view-more-button{
+  margin:32px auto 0!important;
 }
 
 @media(max-width:800px){
@@ -2498,7 +2511,8 @@ body{
     gap:14px!important;
   }
 
-  .message-actions .text-link-button{
+  .message-actions .text-link-button,
+  .message-section .view-more-button{
     width:auto!important;
     font-size:10px!important;
   }
