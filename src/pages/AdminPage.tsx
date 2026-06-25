@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ArrowLeft, Download, Edit3, Lock, MessageSquareText, RefreshCw, Save, Trash2, X } from 'lucide-react';
-import { getCompactScheduleLabel, schedules } from '../data/show';
+import { cast, getCompactScheduleLabel, schedules } from '../data/show';
 import { isDatabaseConfigured, supabase } from '../lib/supabase';
 import { syncGoogleSheet } from '../lib/googleSheet';
 
@@ -73,6 +73,8 @@ export default function AdminPage() {
   }, [items, activeSchedule]);
   const selectedRound = schedules.findIndex(schedule => schedule.value === activeSchedule) + 1;
   const selectedFilterLabel = activeSchedule === 'all' ? '전체 예매내역' : `${selectedRound}회차 예매내역`;
+  const selectedSchedule = schedules.find(schedule => schedule.value === activeSchedule);
+  const selectedCastMembers = selectedSchedule ? cast[selectedSchedule.cast].main.join(' · ') : '';
   const selectedActiveCount = activeSchedule === 'all'
     ? activeItems.length
     : activeItems.filter(item => item.schedule === activeSchedule).length;
@@ -237,6 +239,7 @@ export default function AdminPage() {
           <div>
             <span>Reservation List</span>
             <h2>{selectedFilterLabel}</h2>
+            {selectedCastMembers && <small className="reservation-list-cast">{selectedCastMembers}</small>}
           </div>
           <p>정상 {selectedActiveCount}건{selectedCanceledCount > 0 ? ` · 취소 ${selectedCanceledCount}건` : ''}</p>
         </div>

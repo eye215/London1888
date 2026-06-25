@@ -3043,3 +3043,58 @@ body{
   position:relative!important;
   z-index:2!important;
 }
+
+/* final quick polish 2026-06-25: menu readability, admin cast context, smoother mobile scroll */
+html,
+body,
+#root{
+  min-height:100%;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  touch-action:pan-y!important;
+  -webkit-overflow-scrolling:touch;
+}
+
+.site-shell{
+  min-height:100%;
+  overflow-x:clip!important;
+  overflow-y:visible!important;
+  touch-action:pan-y!important;
+}
+
+.poster-layer,
+.content-art-layer,
+.content-floating-prop{
+  pointer-events:none!important;
+}
+
+.poster-hero,
+.poster-stage,
+.home-page{
+  touch-action:pan-y!important;
+}
+
+.global-menu-primary button{
+  font-size:clamp(17px,4.7vw,28px)!important;
+  line-height:1.08!important;
+  letter-spacing:.01em!important;
+}
+
+@media(max-width:800px){
+  .global-menu-primary{
+    gap:14px!important;
+  }
+
+  .global-menu-primary button{
+    font-size:clamp(16px,6.2vw,24px)!important;
+  }
+}
+
+.reservation-list-cast{
+  display:block;
+  margin-top:7px;
+  color:#9f948e;
+  font-size:11px;
+  line-height:1.6;
+  letter-spacing:.03em;
+}

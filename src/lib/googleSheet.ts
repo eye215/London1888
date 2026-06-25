@@ -20,11 +20,17 @@ export type SheetPayload = {
 export const syncGoogleSheet = (payload: SheetPayload) => {
   if (!SHEET_WEBAPP_URL) return;
 
+  const body = JSON.stringify(payload);
+  const blob = new Blob([body], { type: 'text/plain;charset=utf-8' });
+
+  if (navigator.sendBeacon?.(SHEET_WEBAPP_URL, blob)) return;
+
   fetch(SHEET_WEBAPP_URL, {
     method: 'POST',
     mode: 'no-cors',
+    keepalive: true,
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify(payload),
+    body,
   }).catch(error => {
     console.warn('Google Sheet sync failed', error);
   });
