@@ -242,6 +242,216 @@ body{background:#060505;color:#efe8e2}
   .admin-search select{width:100%}.private-review-card{padding:19px 16px}.private-review-card header,.private-review-card footer{align-items:flex-start;flex-direction:column;gap:7px}
 }
 
+/* 2026-06-25 UX cleanup */
+.primary,
+.submit-button,
+.admin-action-button,
+.admin-mini-button,
+.secondary-action-button,
+.share-image-button,
+.option,
+.actor,
+.message-card,
+.form-section,
+.utility-card,
+.admin-list-panel,
+.admin-summary-card,
+.compact-reservation-list article.admin-reservation-card{
+  border-radius:12px!important;
+}
+
+.footer-actions a:not([href="#/admin"]){
+  display:none!important;
+}
+
+.message-section .view-more-button{
+  display:flex!important;
+  width:max-content!important;
+  margin:34px auto 0!important;
+  text-align:center!important;
+}
+
+.content-art-layer{
+  z-index:3!important;
+  top:86svh!important;
+  min-height:3200px!important;
+  overflow:hidden!important;
+  pointer-events:none!important;
+}
+
+.content-art-layer~.section,
+.content-art-layer~.info-strip,
+.content-art-layer~.site-footer{
+  position:relative;
+  z-index:auto!important;
+}
+
+.content-floating-prop{
+  z-index:3!important;
+  opacity:.82!important;
+  filter:drop-shadow(0 24px 18px rgba(0,0,0,.95)) drop-shadow(0 8px 46px rgba(0,0,0,.88))!important;
+}
+
+.admin-schedule-tabs{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  gap:8px!important;
+  margin:0 0 16px!important;
+}
+
+.admin-schedule-tabs button{
+  width:auto!important;
+  min-height:0!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:8px!important;
+  padding:8px 11px!important;
+  border-radius:999px!important;
+  border:1px solid #3a2d2c!important;
+  background:#0a0808!important;
+  box-shadow:none!important;
+  color:#9f948e!important;
+  font-size:11px!important;
+  white-space:nowrap!important;
+  transform:none!important;
+}
+
+.admin-schedule-tabs button:hover{
+  border-color:#6b2a30!important;
+  background:#141010!important;
+}
+
+.admin-schedule-tabs button.active{
+  border-color:#bd2a36!important;
+  background:#81101a!important;
+  color:#fff!important;
+  box-shadow:none!important;
+}
+
+.admin-schedule-tabs button strong{
+  color:inherit!important;
+  font-size:12px!important;
+  line-height:1!important;
+}
+
+.admin-schedule-tabs button span,
+.admin-schedule-tabs button small{
+  color:inherit!important;
+  opacity:.72;
+  font-size:10px!important;
+  line-height:1!important;
+}
+
+.reservation-list-context{
+  margin-top:12px!important;
+}
+
+.compact-reservation-list{
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr))!important;
+  gap:10px!important;
+}
+
+.compact-reservation-list article.admin-reservation-card{
+  padding:14px!important;
+}
+
+.admin-reservation-card header{
+  margin-bottom:8px!important;
+}
+
+.admin-reservation-card h2{
+  font-size:16px!important;
+}
+
+.admin-reservation-card header p{
+  font-size:10px!important;
+}
+
+.admin-reservation-card header strong{
+  padding:5px 8px!important;
+  font-size:11px!important;
+}
+
+.admin-reservation-card dl{
+  gap:6px!important;
+}
+
+.admin-reservation-card dl div{
+  grid-template-columns:42px 1fr!important;
+}
+
+.admin-reservation-card dt,
+.admin-reservation-card dd{
+  font-size:10px!important;
+}
+
+.admin-card-actions{
+  gap:6px!important;
+  margin-top:10px!important;
+}
+
+.admin-mini-button{
+  min-height:0!important;
+  padding:6px 8px!important;
+  border-radius:999px!important;
+  font-size:10px!important;
+  gap:4px!important;
+}
+
+.admin-mini-button svg{
+  width:12px!important;
+  height:12px!important;
+}
+
+.schedule-options{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+}
+
+.schedule-options .option{
+  min-height:74px!important;
+  align-items:flex-start!important;
+  justify-content:center!important;
+  text-align:left!important;
+  gap:7px!important;
+  padding:13px 12px!important;
+}
+
+.schedule-options .option .schedule-line{
+  display:block!important;
+  width:100%!important;
+  color:#f3ebe6!important;
+  font-size:12px!important;
+  line-height:1.1!important;
+  letter-spacing:.02em!important;
+  white-space:nowrap!important;
+}
+
+.schedule-options .option small{
+  display:-webkit-box!important;
+  width:100%!important;
+  color:#9f948e!important;
+  font-size:10px!important;
+  line-height:1.45!important;
+  letter-spacing:0!important;
+  overflow:hidden!important;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+}
+
+.schedule-options .option.selected small{
+  color:#f1dadd!important;
+}
+
+@media(max-width:800px){
+  .schedule-options{
+    grid-template-columns:1fr!important;
+  }
+
+  .content-floating-prop{
+    opacity:.74!important;
+  }
+}
+
 /* Final admin fixes */
 .reservation-admin-panel{margin-top:22px}
 .reservation-admin-panel .in-panel-summary{margin:0 0 22px}
@@ -2733,3 +2943,36 @@ body{
     bottom:auto!important;
   }
 }
+
+/* final UX override 2026-06-25 */
+.footer-actions a:not([href="#/admin"]){display:none!important}
+.message-section .view-more-button{display:flex!important;width:max-content!important;margin:34px auto 0!important;text-align:center!important}
+.content-art-layer{z-index:3!important;top:86svh!important;min-height:3200px!important;overflow:hidden!important;pointer-events:none!important}
+.content-art-layer~.section,.content-art-layer~.info-strip,.content-art-layer~.site-footer{position:relative;z-index:auto!important}
+.content-floating-prop{z-index:3!important;opacity:.82!important;filter:drop-shadow(0 24px 18px rgba(0,0,0,.95)) drop-shadow(0 8px 46px rgba(0,0,0,.88))!important}
+.primary,.submit-button,.admin-action-button,.admin-mini-button,.secondary-action-button,.share-image-button,.option,.actor,.message-card,.form-section,.utility-card,.admin-list-panel,.admin-summary-card,.compact-reservation-list article.admin-reservation-card{border-radius:12px!important}
+.admin-schedule-tabs{display:flex!important;flex-wrap:wrap!important;gap:8px!important;margin:0 0 16px!important}
+.admin-schedule-tabs button{width:auto!important;min-height:0!important;display:inline-flex!important;align-items:center!important;gap:8px!important;padding:8px 11px!important;border-radius:999px!important;border:1px solid #3a2d2c!important;background:#0a0808!important;box-shadow:none!important;color:#9f948e!important;font-size:11px!important;white-space:nowrap!important;transform:none!important}
+.admin-schedule-tabs button:hover{border-color:#6b2a30!important;background:#141010!important}
+.admin-schedule-tabs button.active{border-color:#bd2a36!important;background:#81101a!important;color:#fff!important;box-shadow:none!important}
+.admin-schedule-tabs button strong{color:inherit!important;font-size:12px!important;line-height:1!important}
+.admin-schedule-tabs button span,.admin-schedule-tabs button small{color:inherit!important;opacity:.72;font-size:10px!important;line-height:1!important}
+.reservation-list-context{margin-top:12px!important}
+.compact-reservation-list{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))!important;gap:10px!important}
+.compact-reservation-list article.admin-reservation-card{padding:14px!important}
+.admin-reservation-card header{margin-bottom:8px!important}
+.admin-reservation-card h2{font-size:16px!important}
+.admin-reservation-card header p{font-size:10px!important}
+.admin-reservation-card header strong{padding:5px 8px!important;font-size:11px!important}
+.admin-reservation-card dl{gap:6px!important}
+.admin-reservation-card dl div{grid-template-columns:42px 1fr!important}
+.admin-reservation-card dt,.admin-reservation-card dd{font-size:10px!important}
+.admin-card-actions{gap:6px!important;margin-top:10px!important}
+.admin-mini-button{min-height:0!important;padding:6px 8px!important;border-radius:999px!important;font-size:10px!important;gap:4px!important}
+.admin-mini-button svg{width:12px!important;height:12px!important}
+.schedule-options{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.schedule-options .option{min-height:74px!important;align-items:flex-start!important;justify-content:center!important;text-align:left!important;gap:7px!important;padding:13px 12px!important}
+.schedule-options .option .schedule-line{display:block!important;width:100%!important;color:#f3ebe6!important;font-size:12px!important;line-height:1.1!important;letter-spacing:.02em!important;white-space:nowrap!important}
+.schedule-options .option small{display:-webkit-box!important;width:100%!important;color:#9f948e!important;font-size:10px!important;line-height:1.45!important;letter-spacing:0!important;overflow:hidden!important;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.schedule-options .option.selected small{color:#f1dadd!important}
+@media(max-width:800px){.schedule-options{grid-template-columns:1fr!important}.content-floating-prop{opacity:.74!important}}

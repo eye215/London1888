@@ -250,9 +250,8 @@ export default function BookingPage() {
                 <div className="option-grid schedule-options">
                   {schedules.map(s => (
                     <button type="button" key={s.value} className={form.schedule === s.value ? 'option selected' : 'option'} onClick={() => { update('schedule', s.value); update('actors', []); }}>
-                      <span>{s.date}</span>
-                      <strong>{s.time}</strong>
-                      <small>CAST {s.cast}</small>
+                      <strong className="schedule-line">{s.date} {s.time}</strong>
+                      <small>{cast[s.cast].main.join(' · ')}</small>
                     </button>
                   ))}
                 </div>

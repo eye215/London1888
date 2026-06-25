@@ -61,17 +61,18 @@ export default function AdminPage() {
   const activeItems = useMemo(() => items.filter(item => !item.admin_deleted_at), [items]);
   const totalPeople = activeItems.reduce((sum, item) => sum + item.num_people, 0);
   const latest = activeItems[0] ? new Date(activeItems[0].created_at).toLocaleDateString('ko-KR') : '-';
-  const scheduleStats = schedules.map(schedule => {
+  const scheduleStats = schedules.map((schedule, index) => {
     const reservations = activeItems.filter(item => item.schedule === schedule.value);
     const people = reservations.reduce((sum, item) => sum + item.num_people, 0);
-    return { schedule, count: reservations.length, people, remain: SEATS_PER_SHOW - people };
+    return { schedule, count: reservations.length, people, remain: SEATS_PER_SHOW - people, round: index + 1 };
   });
 
   const filtered = useMemo(() => {
     const list = activeSchedule === 'all' ? items : items.filter(item => item.schedule === activeSchedule);
     return [...list].sort((a, b) => Number(Boolean(a.admin_deleted_at)) - Number(Boolean(b.admin_deleted_at)));
   }, [items, activeSchedule]);
-  const selectedFilterLabel = activeSchedule === 'all' ? '전체 예매내역' : getCompactScheduleLabel(activeSchedule);
+  const selectedRound = schedules.findIndex(schedule => schedule.value === activeSchedule) + 1;
+  const selectedFilterLabel = activeSchedule === 'all' ? '전체 예매내역' : `${selectedRound}회차 예매내역`;
   const selectedActiveCount = activeSchedule === 'all'
     ? activeItems.length
     : activeItems.filter(item => item.schedule === activeSchedule).length;
@@ -147,7 +148,7 @@ export default function AdminPage() {
   };
 
   const softDelete = async (item: Reservation) => {
-    if (!window.confirm(`${item.name}님의 예매 내역을 삭제 표시할까요? 리스트에서는 흐리게 남습니다.`)) return;
+    if (!window.confirm(`${item.name}님의 예매를 취소 처리할까요?\n확인 선택 시 예매 검색과 후기 입력에서 더 이상 조회되지 않습니다.`)) return;
 
     setLoading(true);
     setActionMessage('');
@@ -162,10 +163,10 @@ export default function AdminPage() {
       const deletedAt = result.admin_deleted_at || new Date().toISOString();
       setItems(prev => prev.map(row => row.id === item.id ? { ...row, admin_deleted_at: deletedAt } : row));
       syncGoogleSheet({ action: 'delete', id: item.id, name: item.name, phone: item.phone, schedule: item.schedule, actorName: item.actor_name, message: item.message || '' });
-      setActionMessage('예매 내역이 삭제 표시되었습니다.');
+      setActionMessage('예매가 취소 처리되었습니다.');
     } catch (error) {
       console.error(error);
-      setActionMessage(error instanceof Error ? `삭제 표시하지 못했습니다. ${error.message}` : '삭제 표시하지 못했습니다.');
+      setActionMessage(error instanceof Error ? `예매를 취소 처리하지 못했습니다. ${error.message}` : '예매를 취소 처리하지 못했습니다.');
     } finally {
       setLoading(false);
     }
@@ -211,21 +212,22 @@ export default function AdminPage() {
 
         <div className="admin-tools">
           <div>
-            <h2>회차별 예매 현황</h2>
-            <p>카드를 선택하면 아래 Reservation List가 해당 회차로 필터링됩니다.</p>
+            <h2>Reservation List</h2>
+            <p>회차별 칩을 선택해 예매 내역을 확인합니다.</p>
           </div>
         </div>
 
-        <div className="admin-schedule-cards admin-schedule-tabs in-panel" aria-label="회차별 예매내역 필터">
+        <div className="admin-schedule-cards admin-schedule-tabs in-panel" aria-label="회차별 예매내역">
           <button type="button" className={activeSchedule === 'all' ? 'active' : ''} aria-pressed={activeSchedule === 'all'} onClick={() => setActiveSchedule('all')}>
-            <header><span>ALL</span><strong>전체 예매</strong></header>
-            <div className="seat-line"><span>{activeItems.length}건 · {totalPeople}명</span><b>{activeSchedule === 'all' ? '선택됨' : '전체 보기'}</b></div>
+            <strong>All</strong>
+            <span>{activeItems.length}건 · {totalPeople}명</span>
           </button>
-          {scheduleStats.map(({ schedule, count, people, remain }) => {
+          {scheduleStats.map(({ schedule, count, people, remain, round }) => {
             return (
               <button type="button" key={schedule.value} className={activeSchedule === schedule.value ? 'active' : ''} aria-pressed={activeSchedule === schedule.value} onClick={() => setActiveSchedule(schedule.value)}>
-                <header><span>FILTER</span><strong>{schedule.date} {schedule.time}</strong></header>
-                <div className="seat-line"><span>{count}건 · {people}명</span><b>{activeSchedule === schedule.value ? '선택됨' : `${remain.toLocaleString()}석 남음`}</b></div>
+                <strong>{round}회차</strong>
+                <span>{count}건 · {people}명</span>
+                <small>{remain.toLocaleString()}석</small>
               </button>
             );
           })}
@@ -286,7 +288,6 @@ export default function AdminPage() {
                     <dl>
                       <div><dt>회차</dt><dd>{getCompactScheduleLabel(item.schedule)}</dd></div>
                       {item.message && <div><dt>응원</dt><dd>{item.message}</dd></div>}
-                      <div><dt>예매일</dt><dd>{new Date(item.created_at).toLocaleString('ko-KR')}</dd></div>
                     </dl>
                     {!isDeleted && (
                       <div className="admin-card-actions">

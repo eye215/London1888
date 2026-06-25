@@ -227,8 +227,6 @@ export default function HomePage() {
           <p>런던의 밤이 당신을 기다립니다.</p>
         </div>
         <div className="footer-actions">
-          <a href="#/manage">갑자기 일정이 변경되셨나요?</a>
-          <a href="#/reservation-check">예매내역확인</a>
           <a href="#/admin">ADMIN</a>
         </div>
       </footer>
