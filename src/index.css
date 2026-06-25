@@ -2976,3 +2976,34 @@ body{
 .schedule-options .option small{display:-webkit-box!important;width:100%!important;color:#9f948e!important;font-size:10px!important;line-height:1.45!important;letter-spacing:0!important;overflow:hidden!important;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 .schedule-options .option.selected small{color:#f1dadd!important}
 @media(max-width:800px){.schedule-options{grid-template-columns:1fr!important}.content-floating-prop{opacity:.74!important}}
+
+/* keep decorative props below all readable content */
+.content-art-layer{
+  z-index:2!important;
+}
+
+.content-floating-prop{
+  z-index:2!important;
+}
+
+.intro>*:not(.content-floating-prop),
+.info-strip>*:not(.content-floating-prop),
+.program-section>*:not(.content-floating-prop),
+.message-section>*:not(.content-floating-prop),
+.site-footer>*:not(.content-floating-prop){
+  position:relative!important;
+  z-index:5!important;
+}
+
+.section-heading,
+.body-copy,
+.cast-list,
+.message-actions,
+.message-grid,
+.message-empty,
+.view-more-button,
+.info-strip>div,
+.site-footer>div{
+  position:relative!important;
+  z-index:5!important;
+}
