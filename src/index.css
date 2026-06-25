@@ -2979,11 +2979,11 @@ body{
 
 /* keep decorative props below all readable content */
 .content-art-layer{
-  z-index:2!important;
+  z-index:0!important;
 }
 
 .content-floating-prop{
-  z-index:2!important;
+  z-index:0!important;
 }
 
 .intro>*:not(.content-floating-prop),
@@ -3006,4 +3006,40 @@ body{
 .site-footer>div{
   position:relative!important;
   z-index:5!important;
+}
+
+/* stronger decorative-layer demotion */
+.content-art-layer,
+.content-floating-prop{
+  z-index:0!important;
+}
+
+.intro,
+.info-strip,
+.program-section,
+.message-section,
+.site-footer{
+  position:relative!important;
+  z-index:1!important;
+}
+
+.intro::before,
+.info-strip::before,
+.program-section::before,
+.message-section::before,
+.site-footer::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+}
+
+.intro>*,
+.info-strip>*,
+.program-section>*,
+.message-section>*,
+.site-footer>*{
+  position:relative!important;
+  z-index:2!important;
 }
