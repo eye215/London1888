@@ -3743,3 +3743,28 @@ body{
 .message-card footer{
   border-top:1px solid rgba(255,255,255,.12)!important;
 }
+
+/* match info strip dividers to message card divider 2026-06-26 */
+.info-strip{
+  border-top:1px solid rgba(255,255,255,.12)!important;
+  border-bottom:1px solid rgba(255,255,255,.12)!important;
+}
+
+.info-strip>div{
+  border-right:1px solid rgba(255,255,255,.12)!important;
+}
+
+.info-strip>div:last-child{
+  border-right:0!important;
+}
+
+@media(max-width:800px){
+  .info-strip>div{
+    border-right:0!important;
+    border-bottom:1px solid rgba(255,255,255,.12)!important;
+  }
+
+  .info-strip>div:last-child{
+    border-bottom:0!important;
+  }
+}
