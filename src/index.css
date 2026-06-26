@@ -3728,3 +3728,18 @@ body{
 .message-card footer{
   border-top:1px solid rgba(210,200,190,.18)!important;
 }
+
+/* glass dark style for message cards 2026-06-26 */
+.message-card,
+.message-empty{
+  background:rgba(18,18,18,.35)!important;
+  backdrop-filter:blur(24px) saturate(180%)!important;
+  -webkit-backdrop-filter:blur(24px) saturate(180%)!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+  box-shadow:0 12px 40px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08)!important;
+  border-radius:20px!important;
+}
+
+.message-card footer{
+  border-top:1px solid rgba(255,255,255,.12)!important;
+}
