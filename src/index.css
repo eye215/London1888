@@ -3700,3 +3700,8 @@ body{
     top:3%!important;
   }
 }
+
+/* program readability tint 2026-06-26 */
+.program-section{
+  background:rgba(0,0,0,.4)!important;
+}
