@@ -3677,3 +3677,26 @@ body{
     bottom:-8%!important;
   }
 }
+
+/* prop visibility tuning 2026-06-26 */
+.section-scene-sickle{
+  left:-1vw!important;
+}
+
+.info-strip .section-scene-revolver{
+  width:min(190px,22vw)!important;
+  right:8vw!important;
+  top:-10%!important;
+}
+
+@media(max-width:800px){
+  .section-scene-sickle{
+    left:-20vw!important;
+  }
+
+  .info-strip .section-scene-revolver{
+    width:30vw!important;
+    right:6vw!important;
+    top:3%!important;
+  }
+}
