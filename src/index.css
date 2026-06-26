@@ -3705,3 +3705,21 @@ body{
 .program-section{
   background:rgba(0,0,0,.4)!important;
 }
+
+/* intro copy emphasis + info labels 2026-06-26 */
+.intro .section-heading,
+.intro h2,
+.intro h2 em,
+.intro .body-copy,
+.intro > div,
+.intro > p{
+  text-shadow:0 3px 14px rgba(0,0,0,.92),0 0 24px rgba(120,0,10,.34)!important;
+}
+
+.info-strip span{
+  color:#b71926!important;
+}
+
+.info-strip strong{
+  color:#f2e9e3!important;
+}
