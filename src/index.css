@@ -3723,3 +3723,8 @@ body{
 .info-strip strong{
   color:#f2e9e3!important;
 }
+
+/* soften message card divider 2026-06-26 */
+.message-card footer{
+  border-top:1px solid rgba(210,200,190,.18)!important;
+}
