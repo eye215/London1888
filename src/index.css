@@ -3443,3 +3443,40 @@ body{
   display:block!important;
   position:relative!important;
 }
+
+/* ordered section props + cleaner hero CTA copy 2026-06-26 */
+.content-art-layer{
+  display:none!important;
+}
+
+.intro,
+.info-strip,
+.program-section,
+.message-section,
+.site-footer{
+  position:relative!important;
+  overflow:visible!important;
+  isolation:isolate;
+}
+
+.section-scene-prop{
+  position:absolute!important;
+  z-index:0!important;
+  opacity:.92!important;
+  pointer-events:none!important;
+  filter:drop-shadow(0 24px 22px rgba(0,0,0,.96))!important;
+}
+
+.intro>*:not(.section-scene-prop),
+.info-strip>*:not(.section-scene-prop),
+.program-section>*:not(.section-scene-prop),
+.message-section>*:not(.section-scene-prop),
+.site-footer>*:not(.section-scene-prop){
+  position:relative!important;
+  z-index:2!important;
+}
+
+.hero-actions p,
+.hero-date-only p{
+  text-shadow:none!important;
+}
