@@ -3768,3 +3768,13 @@ body{
     border-bottom:0!important;
   }
 }
+
+/* lighter glass for message cards 2026-06-26 */
+.message-card,
+.message-empty{
+  background:rgba(18,18,18,.22)!important;
+  backdrop-filter:blur(18px) saturate(150%)!important;
+  -webkit-backdrop-filter:blur(18px) saturate(150%)!important;
+  border:1px solid rgba(255,255,255,.07)!important;
+  box-shadow:0 10px 28px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.07)!important;
+}
