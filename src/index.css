@@ -3568,3 +3568,17 @@ body{
   52%{transform:translate3d(-9px,13px,0) rotate(calc(var(--section-prop-rotate) - 1.8deg))}
   100%{transform:translate3d(3px,-4px,0) rotate(calc(var(--section-prop-rotate) + .3deg))}
 }
+
+/* experiment 2026-06-26: force section children absolute per request */
+.intro>*:not(.content-floating-prop),
+.info-strip>*:not(.content-floating-prop),
+.program-section>*:not(.content-floating-prop),
+.message-section>*:not(.content-floating-prop),
+.site-footer>*:not(.content-floating-prop){
+  position:absolute!important;
+  z-index:2!important;
+}
+
+.message-card footer{
+  border-top:1px solid rgba(255,255,255,.4)!important;
+}
