@@ -3778,3 +3778,9 @@ body{
   border:1px solid rgba(255,255,255,.07)!important;
   box-shadow:0 10px 28px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.07)!important;
 }
+
+/* force story headline shadow 2026-06-26 */
+.site-shell .intro h2,
+.site-shell .intro h2 em{
+  text-shadow:0 4px 18px rgba(0,0,0,.96),0 0 30px rgba(140,0,14,.42),0 1px 0 rgba(255,255,255,.08)!important;
+}
