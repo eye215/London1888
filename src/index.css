@@ -3414,3 +3414,32 @@ body,
     bottom:6%!important;
   }
 }
+
+/* single-scroll-owner fix 2026-06-26: prevent double vertical scrollbars */
+html{
+  height:auto!important;
+  min-height:100%!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  scrollbar-gutter:auto!important;
+}
+
+body{
+  height:auto!important;
+  min-height:100dvh!important;
+  overflow-x:hidden!important;
+  overflow-y:visible!important;
+}
+
+#root,
+.site-shell{
+  height:auto!important;
+  min-height:100dvh!important;
+  max-height:none!important;
+  overflow:visible!important;
+}
+
+.site-shell{
+  display:block!important;
+  position:relative!important;
+}
