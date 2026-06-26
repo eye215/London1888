@@ -152,7 +152,7 @@ export default function HomePage() {
       </section>
 
       <section className="info-strip">
-        <img className="section-scene-prop section-scene-camera" src={asset('assets/floating-camera.png')} alt="" aria-hidden="true" />
+        <img className="section-scene-prop section-scene-revolver" src={asset('assets/floating-revolver.png')} alt="" aria-hidden="true" />
         <div><CalendarDays /><span>DATES<strong>2026. 07. 25 — 07. 26</strong></span></div>
         <div><Clock3 /><span>TIME<strong>13:00 / 16:00</strong></span></div>
         <div><MapPin /><span>VENUE<strong>공연장 추후 안내</strong></span></div>
@@ -226,7 +226,6 @@ export default function HomePage() {
       </section>
 
       <footer className="site-footer">
-        <img className="section-scene-prop section-scene-revolver" src={asset('assets/floating-revolver.png')} alt="" aria-hidden="true" />
         <div>
           <span className="footer-title">1888</span>
           <p>런던의 밤이 당신을 기다립니다.</p>

@@ -3618,15 +3618,21 @@ body{
 
 /* prop position tuning 2026-06-26 */
 .section-scene-sickle{
-  left:-10vw!important;
+  left:-5vw!important;
   right:auto!important;
   top:2%!important;
 }
 
-.section-scene-camera{
+.section-scene-camera,
+.info-strip .section-scene-revolver{
   left:auto!important;
   right:3vw!important;
   top:-12%!important;
+}
+
+.info-strip .section-scene-revolver{
+  width:min(230px,28vw)!important;
+  bottom:auto!important;
 }
 
 .section-scene-dagger{
@@ -3643,15 +3649,21 @@ body{
 
 @media(max-width:800px){
   .section-scene-sickle{
-    left:-34vw!important;
+    left:-27vw!important;
     right:auto!important;
     top:8%!important;
   }
 
-  .section-scene-camera{
+  .section-scene-camera,
+  .info-strip .section-scene-revolver{
     left:auto!important;
     right:-14vw!important;
     top:0!important;
+  }
+
+  .info-strip .section-scene-revolver{
+    width:36vw!important;
+    bottom:auto!important;
   }
 
   .section-scene-dagger{
