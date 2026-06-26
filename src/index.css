@@ -3568,3 +3568,50 @@ body{
   52%{transform:translate3d(-9px,13px,0) rotate(calc(var(--section-prop-rotate) - 1.8deg))}
   100%{transform:translate3d(3px,-4px,0) rotate(calc(var(--section-prop-rotate) + .3deg))}
 }
+
+/* hard layer contract 2026-06-26: props below, readable content above */
+.intro,
+.info-strip,
+.program-section,
+.message-section,
+.site-footer{
+  position:relative!important;
+  isolation:isolate!important;
+  overflow:visible!important;
+}
+
+.intro .section-scene-prop,
+.info-strip .section-scene-prop,
+.program-section .section-scene-prop,
+.message-section .section-scene-prop,
+.site-footer .section-scene-prop{
+  position:absolute!important;
+  z-index:0!important;
+  pointer-events:none!important;
+}
+
+.intro > :not(.section-scene-prop),
+.info-strip > :not(.section-scene-prop),
+.program-section > :not(.section-scene-prop),
+.message-section > :not(.section-scene-prop),
+.site-footer > :not(.section-scene-prop),
+.intro :where(h1,h2,h3,p,span,strong,small,a,button,em,time,div,article,footer,svg):not(.section-scene-prop),
+.info-strip :where(h1,h2,h3,p,span,strong,small,a,button,em,time,div,article,footer,svg):not(.section-scene-prop),
+.program-section :where(h1,h2,h3,p,span,strong,small,a,button,em,time,div,article,footer,svg):not(.section-scene-prop),
+.message-section :where(h1,h2,h3,p,span,strong,small,a,button,em,time,div,article,footer,svg):not(.section-scene-prop),
+.site-footer :where(h1,h2,h3,p,span,strong,small,a,button,em,time,div,article,footer,svg):not(.section-scene-prop){
+  position:relative!important;
+  z-index:3!important;
+}
+
+.message-card,
+.message-empty,
+.cast-list,
+.cast-row,
+.message-grid,
+.message-actions,
+.section-heading,
+.body-copy{
+  position:relative!important;
+  z-index:4!important;
+}
