@@ -3098,3 +3098,319 @@ body,
   line-height:1.6;
   letter-spacing:.03em;
 }
+
+/* home visual depth pass: lift decorative props one layer and add black shadows */
+.content-art-layer{
+  z-index:9!important;
+}
+
+.content-floating-prop{
+  z-index:9!important;
+  opacity:1!important;
+  filter:drop-shadow(0 28px 24px rgba(0,0,0,1)) drop-shadow(0 8px 52px rgba(0,0,0,.96))!important;
+}
+
+.intro,
+.info-strip,
+.program-section,
+.message-section,
+.site-footer{
+  z-index:2!important;
+}
+
+.intro>*,
+.info-strip>*,
+.program-section>*,
+.message-section>*,
+.site-footer>*,
+.section-heading,
+.body-copy,
+.cast-list,
+.message-actions,
+.message-grid,
+.message-empty,
+.view-more-button,
+.info-strip>div,
+.site-footer>div{
+  z-index:6!important;
+}
+
+.site-shell :where(
+  .section,
+  .info-strip,
+  .cast-list,
+  .cast-row,
+  .message-card,
+  .message-empty,
+  .message-actions,
+  .soft-primary,
+  .text-link-button,
+  .view-more-button,
+  .site-footer,
+  .hero-dday,
+  .quick-top-button,
+  .mobile-book,
+  .hamburger-button
+){
+  box-shadow:0 24px 58px rgba(0,0,0,.58),0 0 0 1px rgba(0,0,0,.28)!important;
+}
+
+.site-shell :where(
+  h1,h2,h3,p,span,strong,small,a,button,em,time,div
+){
+  text-shadow:0 3px 10px rgba(0,0,0,.9),0 12px 28px rgba(0,0,0,.72)!important;
+}
+
+.site-shell img{
+  text-shadow:none!important;
+}
+
+/* emergency visibility fix: props must actually render above the scroll content */
+.content-art-layer{
+  display:block!important;
+  visibility:visible!important;
+  position:absolute!important;
+  inset:86svh 0 auto 0!important;
+  width:100%!important;
+  height:3600px!important;
+  min-height:3600px!important;
+  overflow:visible!important;
+  z-index:20!important;
+  pointer-events:none!important;
+  contain:none!important;
+}
+
+.content-floating-prop{
+  display:block!important;
+  visibility:visible!important;
+  position:absolute!important;
+  z-index:21!important;
+  opacity:1!important;
+  mix-blend-mode:normal!important;
+  filter:drop-shadow(0 30px 24px #000) drop-shadow(0 10px 58px rgba(0,0,0,.98))!important;
+}
+
+.content-prop-sickle{
+  width:min(760px,84vw)!important;
+  right:-18vw!important;
+  left:auto!important;
+  top:3%!important;
+}
+
+.content-prop-camera{
+  width:min(430px,54vw)!important;
+  left:-6vw!important;
+  right:auto!important;
+  top:23%!important;
+}
+
+.content-prop-dagger{
+  width:min(860px,94vw)!important;
+  right:-18vw!important;
+  left:auto!important;
+  top:41%!important;
+}
+
+.content-prop-typewriter{
+  width:min(580px,76vw)!important;
+  left:-8vw!important;
+  right:auto!important;
+  top:61%!important;
+  bottom:auto!important;
+}
+
+.content-prop-revolver{
+  width:min(390px,58vw)!important;
+  right:-4vw!important;
+  left:auto!important;
+  top:80%!important;
+  bottom:auto!important;
+}
+
+@media(max-width:800px){
+  .content-art-layer{
+    inset:82svh 0 auto 0!important;
+    height:3000px!important;
+    min-height:3000px!important;
+  }
+
+  .content-prop-sickle{
+    width:116vw!important;
+    right:-44vw!important;
+    top:4%!important;
+  }
+
+  .content-prop-camera{
+    width:76vw!important;
+    left:-22vw!important;
+    top:24%!important;
+  }
+
+  .content-prop-dagger{
+    width:140vw!important;
+    right:-58vw!important;
+    top:43%!important;
+  }
+
+  .content-prop-typewriter{
+    width:96vw!important;
+    left:-24vw!important;
+    top:61%!important;
+  }
+
+  .content-prop-revolver{
+    width:72vw!important;
+    right:-18vw!important;
+    top:80%!important;
+  }
+}
+
+/* scroll rescue: keep visual layers from breaking native page scroll */
+html{
+  height:auto!important;
+  min-height:100%!important;
+  overflow-x:hidden!important;
+  overflow-y:scroll!important;
+  overscroll-behavior-y:auto!important;
+  touch-action:auto!important;
+  -webkit-overflow-scrolling:touch!important;
+}
+
+body,
+#root,
+.site-shell{
+  height:auto!important;
+  min-height:100dvh!important;
+  max-height:none!important;
+  overflow-x:hidden!important;
+  overflow-y:visible!important;
+  overscroll-behavior-y:auto!important;
+  touch-action:auto!important;
+  -webkit-overflow-scrolling:touch!important;
+}
+
+.site-shell{
+  display:block!important;
+  position:relative!important;
+}
+
+.poster-hero,
+.poster-stage,
+.intro,
+.info-strip,
+.program-section,
+.message-section,
+.site-footer{
+  touch-action:auto!important;
+}
+
+.content-art-layer,
+.content-floating-prop,
+.poster-layer{
+  pointer-events:none!important;
+  touch-action:none!important;
+}
+
+/* stable section props: render each prop inside its own scroll section */
+.content-art-layer{
+  display:none!important;
+}
+
+.intro,
+.info-strip,
+.program-section,
+.message-section,
+.site-footer{
+  overflow:visible!important;
+}
+
+.section-scene-prop{
+  display:block!important;
+  visibility:visible!important;
+  position:absolute!important;
+  z-index:1!important;
+  opacity:1!important;
+  pointer-events:none!important;
+  user-select:none!important;
+  max-width:none!important;
+  height:auto!important;
+  mix-blend-mode:normal!important;
+  filter:drop-shadow(0 28px 22px #000) drop-shadow(0 8px 48px rgba(0,0,0,.96))!important;
+  animation:section-prop-float 9.5s ease-in-out infinite alternate;
+}
+
+.intro>*:not(.section-scene-prop),
+.info-strip>*:not(.section-scene-prop),
+.program-section>*:not(.section-scene-prop),
+.message-section>*:not(.section-scene-prop),
+.site-footer>*:not(.section-scene-prop){
+  position:relative!important;
+  z-index:5!important;
+}
+
+.section-scene-sickle{
+  --section-prop-rotate:-8deg;
+  width:min(520px,58vw)!important;
+  right:-4vw!important;
+  top:4%!important;
+}
+
+.section-scene-camera{
+  --section-prop-rotate:5deg;
+  width:min(340px,34vw)!important;
+  left:2vw!important;
+  top:-18%!important;
+}
+
+.section-scene-dagger{
+  --section-prop-rotate:-18deg;
+  width:min(620px,62vw)!important;
+  right:-2vw!important;
+  top:8%!important;
+}
+
+.section-scene-typewriter{
+  --section-prop-rotate:-10deg;
+  width:min(420px,44vw)!important;
+  left:1vw!important;
+  bottom:2%!important;
+}
+
+.section-scene-revolver{
+  --section-prop-rotate:15deg;
+  width:min(260px,31vw)!important;
+  right:3vw!important;
+  bottom:4%!important;
+}
+
+@media(max-width:800px){
+  .section-scene-sickle{
+    width:76vw!important;
+    right:-24vw!important;
+    top:8%!important;
+  }
+
+  .section-scene-camera{
+    width:48vw!important;
+    left:-6vw!important;
+    top:-4%!important;
+  }
+
+  .section-scene-dagger{
+    width:84vw!important;
+    right:-20vw!important;
+    top:10%!important;
+  }
+
+  .section-scene-typewriter{
+    width:66vw!important;
+    left:-10vw!important;
+    bottom:4%!important;
+  }
+
+  .section-scene-revolver{
+    width:42vw!important;
+    right:0!important;
+    bottom:6%!important;
+  }
+}
