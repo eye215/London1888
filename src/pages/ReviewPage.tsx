@@ -85,7 +85,7 @@ export default function ReviewPage() {
       </header>
       <section className="utility-hero review-hero">
         <p>CURTAIN CALL</p>
-        <h1>공연의 시간을<br />배우에게 전해주세요</h1>
+        <h1>배우에게 한마디</h1>
         <span>{access.scheduleLabel}</span>
       </section>
       <section className="utility-card review-card">
